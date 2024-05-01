@@ -1,6 +1,5 @@
-"use client";
-
 import { Navbar } from "flowbite-react";
+import { Link } from "react-router-dom";
 
 function NavBar() {
     return (
@@ -12,20 +11,25 @@ function NavBar() {
                     alt="Career Guide Logo"
                 />
                 <span className="self-center whitespace-nowrap text-xl font-semibold dark:text-white">
-                    Career Guide
+                    <Link to="/">Career Guide</Link>
                 </span>
             </Navbar.Brand>
             <Navbar.Collapse>
-                <Navbar.Link href="#" active>
-                    Home
-                </Navbar.Link>
-                <Navbar.Link href="#about">About</Navbar.Link>
-                <Navbar.Link href="#blogs">Blogs</Navbar.Link>
-                <Navbar.Link href="#contactsUs">Contact Us</Navbar.Link>
-                <Navbar.Link href="#login">Login</Navbar.Link>
+                <Link to="/">Home</Link>
+                {/* <Link to="/about">About</Link> */}
+                <Link to="/blogs">Blogs</Link>
+                <Link to="/contactUs">Contact Us</Link>
+                <Link to="/login">Login</Link>
             </Navbar.Collapse>
         </Navbar>
     );
 }
 
 export default NavBar;
+
+{
+    /* <Navbar.Link href="#" active> */
+    /* active should be according to url */
+    /* Home */
+    /* </Navbar.Link> */
+}

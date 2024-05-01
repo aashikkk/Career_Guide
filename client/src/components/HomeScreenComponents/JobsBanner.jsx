@@ -1,5 +1,5 @@
-"use client";
 import React from "react";
+import { Link } from "react-router-dom";
 import { Table, Button } from "flowbite-react";
 
 function JobsBanner() {
@@ -15,7 +15,7 @@ function JobsBanner() {
                         gradientDuoTone="purpleToPink"
                         name="viewAllBtn"
                     >
-                        View All
+                        <Link to="/jobs">View All</Link>
                     </Button>
                 </div>
             </div>

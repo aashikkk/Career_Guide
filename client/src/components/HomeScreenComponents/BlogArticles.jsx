@@ -1,5 +1,6 @@
 "use client";
 import React from "react";
+import { Link } from "react-router-dom";
 import { Button } from "flowbite-react";
 
 function BlogArticles() {
@@ -15,7 +16,7 @@ function BlogArticles() {
                         gradientDuoTone="purpleToPink"
                         name="viewAllBtn"
                     >
-                        View All
+                        <Link to="/blogs">View All</Link>
                     </Button>
                 </div>
                 <div></div>

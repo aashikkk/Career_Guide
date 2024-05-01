@@ -1,3 +1,4 @@
+import React from "react";
 import BlogArticles from "../components/HomeScreenComponents/BlogArticles";
 import CareerRegBanner from "../components/HomeScreenComponents/CareerRegBanner";
 import CounsellerBanner from "../components/HomeScreenComponents/CounsellerBanner";

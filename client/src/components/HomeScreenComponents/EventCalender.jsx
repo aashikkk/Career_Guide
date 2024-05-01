@@ -1,6 +1,6 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import EventCard from "./EventCard";
-
 import { Button } from "flowbite-react";
 
 function EventCalender() {
@@ -16,7 +16,7 @@ function EventCalender() {
                         outline
                         name="viewAllBtn"
                     >
-                        View All
+                        <Link to="/events">View All</Link>
                     </Button>
                 </div>
             </div>
