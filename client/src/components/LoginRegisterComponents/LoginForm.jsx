@@ -19,7 +19,7 @@ function LoginForm() {
                     <div className="shrink-1 mb-12 grow-0 basis-auto md:mb-0 md:w-9/12 md:shrink-0 lg:w-6/12 xl:w-6/12">
                         <img
                             src="https://img.freepik.com/premium-vector/welcome-back-lettering-door-plaque-welcome-back-hanging-sign-board-concept-welcoming-home_497399-46.jpg"
-                            className="w-10/12"
+                            className="w-8//12"
                             alt="Welcome Back image"
                         />
                     </div>

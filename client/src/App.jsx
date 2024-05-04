@@ -19,7 +19,7 @@ function App() {
                 <Route path="/blogs" exact element={<BlogsPage />} />
                 <Route path="/jobs" exact element={<JobsPage />} />
                 <Route path="/events" exact element={<EventCalenderPage />} />
-                <Route path="/notFound" element={<NotFoundPage />} />
+                <Route element={<NotFoundPage />} />
             </Routes>
         </Router>
     );

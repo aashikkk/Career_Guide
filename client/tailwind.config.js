@@ -31,5 +31,8 @@ export default {
         },
     },
     darkMode: "class",
-    plugins: [require("tw-elements/plugin.cjs"), flowbite.plugin()],
+    plugins: [
+        require("tw-elements/plugin.cjs", "flowbite-typography"),
+        flowbite.plugin(),
+    ],
 };
