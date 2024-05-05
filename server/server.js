@@ -1,31 +1,30 @@
 const express = require("express");
+const dotenv = require("dotenv");
+dotenv.config({ override: true });
 const app = express();
 const bodyParser = require("body-parser");
+const cors = require("cors");
 
 // Import route files
 const adminRoutes = require("./routes/adminRoutes");
-const schoolStudentRoutes = require("./routes/schoolStudentRoutes");
-const undergraduateRoutes = require("./routes/undergraduateRoutes");
-const graduateRoutes = require("./routes/graduateRoutes");
+const userRoutes = require("./routes/userRoute");
 const resourcePersonRoutes = require("./routes/resourcePersonRoutes");
 const eventRoutes = require("./routes/eventRoutes");
 const appointmentRoutes = require("./routes/appointmentRoutes");
 const blogRoutes = require("./routes/blogRoutes");
 const jobRoutes = require("./routes/jobRoutes");
-const registerRoutes = require("./routes/registerRoute");
-const loginRoutes = require("./routes/loginRoute");
+const auth = require("./routes/auth");
 
 // Middleware
 app.use(bodyParser.json());
 app.use(express.json());
+app.use(cors());
+app.use(express.urlencoded({ extended: false }));
 
 // Routes
-app.use("/register", registerRoutes);
-app.use("/login", loginRoutes);
+app.use("/auth", auth);
 app.use("/admin", adminRoutes);
-app.use("/school-student", schoolStudentRoutes);
-app.use("/undergraduate", undergraduateRoutes);
-app.use("/graduate", graduateRoutes);
+app.use("/user", userRoutes);
 app.use("/resource-person", resourcePersonRoutes);
 app.use("/event", eventRoutes);
 app.use("/appointment", appointmentRoutes);
@@ -45,8 +44,8 @@ app.use("/job", jobRoutes);
 //   next();
 // });
 
-const PORT = 5000;
+const PORT = process.env.PORT;
 
 app.listen(PORT, () => {
-    console.log(`Server is running on http://localhost:${PORT}`);
+	console.log(`Server is running on http://localhost:${PORT}`);
 });

@@ -53,7 +53,7 @@ function LoginForm() {
                             <p className="mb-0 mt-2 pt-1 text-sm font-semibold">
                                 Don&apos;t have an account? &nbsp;
                                 <a
-                                    href="#!"
+                                    href="/register"
                                     className="text-danger transition duration-150 ease-in-out hover:text-danger-600 focus:text-danger-600 active:text-danger-700"
                                 >
                                     Register

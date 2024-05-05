@@ -10,8 +10,6 @@ CREATE TABLE IF NOT EXISTS Admin (
     name VARCHAR(50) NOT NULL,
     username VARCHAR(20) UNIQUE,
     emailAddress VARCHAR(50) NOT NULL,
-    nic VARCHAR(13) NOT NULL,
-    age INT,
     password VARCHAR(20) NOT NULL
 );
 
@@ -40,22 +38,7 @@ CREATE TABLE IF NOT EXISTS Event (
     location VARCHAR(50)
 );
 
--- Create the Graduate table
-CREATE TABLE IF NOT EXISTS Graduate (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(50) NOT NULL,
-    username VARCHAR(20) UNIQUE,
-    phoneNumber VARCHAR(15),
-    emailAddress VARCHAR(50) NOT NULL,
-    highestQualifications VARCHAR(255),
-    nic VARCHAR(13) NOT NULL,
-    age INT,
-    password VARCHAR(30) NOT NULL,
-    currentYear INT,
-    educationLevel VARCHAR(255),
-    majorField VARCHAR(255),
-    expectedGraduateYear INT
-);
+
 
 -- Create the Job table
 CREATE TABLE IF NOT EXISTS Job (
@@ -81,33 +64,70 @@ CREATE TABLE IF NOT EXISTS ResourcePerson (
     referees TEXT
 );
 
--- Create the SchoolStudent table
-CREATE TABLE IF NOT EXISTS SchoolStudent (
+-- For 3 Users
+CREATE TABLE IF NOT EXISTS Users (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(50) NOT NULL,
     username VARCHAR(30) UNIQUE,
     phoneNumber VARCHAR(15),
-    emailAddress VARCHAR(30) NOT NULL,
-    highestQualifications VARCHAR(255),
-    nic VARCHAR(13) NOT NULL,
-    age INT,
-    password VARCHAR(30) NOT NULL,
-    grade VARCHAR(10)
-);
-
--- Create the Undergraduate table
-CREATE TABLE IF NOT EXISTS Undergraduate (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(50) NOT NULL,
-    username VARCHAR(20) UNIQUE,
-    phoneNumber VARCHAR(15),
     emailAddress VARCHAR(50) NOT NULL,
     highestQualifications VARCHAR(255),
-    nic VARCHAR(13) NOT NULL,
+    nic VARCHAR(13),
     age INT,
     password VARCHAR(30) NOT NULL,
+    category ENUM('SchoolStudent', 'Undergraduate', 'Graduate'),
+    grade VARCHAR(10),
     currentYear INT,
-    educationLevel VARCHAR(100),
-    majorField VARCHAR(100),
-    expectedGraduateYear INT
+    educationLevel VARCHAR(255),
+    majorField VARCHAR(255),
+    GraduateYear INT
 );
+
+
+-- -- Create the SchoolStudent table
+-- CREATE TABLE IF NOT EXISTS SchoolStudent (
+--     id INT AUTO_INCREMENT PRIMARY KEY,
+--     name VARCHAR(50) NOT NULL,
+--     username VARCHAR(30) UNIQUE,
+--     phoneNumber VARCHAR(15),
+--     emailAddress VARCHAR(30) NOT NULL,
+--     highestQualifications VARCHAR(255),
+--     nic VARCHAR(13),
+--     age INT,
+--     password VARCHAR(30) NOT NULL,
+--     grade VARCHAR(10)
+-- );
+
+-- -- Create the Undergraduate table
+-- CREATE TABLE IF NOT EXISTS Undergraduate (
+--     id INT AUTO_INCREMENT PRIMARY KEY,
+--     name VARCHAR(50) NOT NULL,
+--     username VARCHAR(20) UNIQUE,
+--     phoneNumber VARCHAR(15),
+--     emailAddress VARCHAR(50) NOT NULL,
+--     highestQualifications VARCHAR(255),
+--     nic VARCHAR(13) NOT NULL,
+--     age INT,
+--     password VARCHAR(30) NOT NULL,
+--     currentYear INT,
+--     educationLevel VARCHAR(100),
+--     majorField VARCHAR(100),
+--     expectedGraduateYear INT
+-- );
+
+-- -- Create the Graduate table
+-- CREATE TABLE IF NOT EXISTS Graduate (
+--     id INT AUTO_INCREMENT PRIMARY KEY,
+--     name VARCHAR(50) NOT NULL,
+--     username VARCHAR(20) UNIQUE,
+--     phoneNumber VARCHAR(15),
+--     emailAddress VARCHAR(50) NOT NULL,
+--     highestQualifications VARCHAR(255),
+--     nic VARCHAR(13) NOT NULL,
+--     age INT,
+--     password VARCHAR(30) NOT NULL,
+--     currentYear INT,
+--     educationLevel VARCHAR(255),
+--     majorField VARCHAR(255),
+--     expectedGraduateYear INT
+-- );
