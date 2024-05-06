@@ -1,6 +1,7 @@
-import React, {useEffect, useState} from "react";
+import {useEffect, useState} from "react";
 import { Input, Ripple, initTWE } from "tw-elements";
-import axios from "axios"
+import axios from "axios";
+axios.defaults.baseURL = 'http://localhost:5000';
 
 import InputText from "./InputText";
 import RememberMeCheckBox from "./RememberMeCheckBox";
@@ -64,15 +65,15 @@ function RegisterForm() {
                                 placeholder={"Email Address"}
                                 labelName={"Email Address"}
                                 value={email}
-                                onChange={(e) => setEmail(e.target.value)}
+                                onChange={(value) => setEmail(value)}
+                                
                             />
-
                             <InputText
                                 type={"text"}
                                 placeholder={"Full Name"}
                                 labelName={"Full Name"}
                                 value={name}
-                                onChange={(e) => setName(e.target.value)}
+                                onChange={(value) => setName(value)}
 
                             />
                             <InputText
@@ -80,7 +81,7 @@ function RegisterForm() {
                                 placeholder={"Username"}
                                 labelName={"Username"}
                                 value={username}
-                                onChange={(e) => setUsername(e.target.value)}
+                                onChange={(value) => setUsername(value)}
                             />
 
                             <InputText
@@ -88,7 +89,7 @@ function RegisterForm() {
                                 placeholder={"NIC"}
                                 labelName={"NIC"}
                                 value={nic}
-                                onChange={(e) => setNic(e.target.value)}
+                                onChange={(value) => setNic(value)}
                             />
 
                             <InputText
@@ -96,15 +97,14 @@ function RegisterForm() {
                                 placeholder={"Phone Number"}
                                 labelName={"Phone Number"}
                                 value={phoneNumber}
-                                onChange={(e) => setPhoneNumber(e.target.value)}
+                                onChange={(value) => setPhoneNumber(value)}
                             />
-
                             <InputText
                                 type={"password"}
                                 placeholder={"Password"}
                                 labelName={"Password"}
                                 value={password}
-                                onChange={(e) => setPassword(e.target.value)}
+                                onChange={(value) => setPassword(value)}
                             />
 
                             <div className="relative mb-6">

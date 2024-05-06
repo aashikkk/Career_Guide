@@ -1,18 +1,27 @@
 import React, { useEffect } from "react";
-import { Input, Ripple, initTWE } from "tw-elements";
+// import { Input, Ripple, initTWE } from "tw-elements";
 
-function InputText({ type, placeholder, inputId, inputHtmlFor, labelName }) {
-    useEffect(()=>{
-        initTWE({ Input, Ripple });
-    })
+function InputText({ type, placeholder, value,inputHtmlFor, onChange, labelName }) {
+    // useEffect(()=>{
+    //     initTWE({ Input, Ripple });
+    // })
 
+    const handleChange = (e) => {
+        if (onChange) {
+            onChange(e.target.value);
+        }
+    };
+
+
+    
     return (
         <div className="relative mb-6" data-twe-input-wrapper-init>
             <input
                 type={type}
                 className="peer block min-h-[auto] w-full rounded border  bg-gray-50 px-3 py-[0.32rem] leading-[2.15] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[twe-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none dark:text-white dark:placeholder:text-neutral-300 dark:autofill:shadow-autofill dark:peer-focus:text-primary [&:not([data-twe-input-placeholder-active])]:placeholder:opacity-0"
-                id={inputId}
                 placeholder={placeholder}
+                value={value}
+                onChange={handleChange}
             />
             <label
                 htmlFor={inputHtmlFor}
