@@ -13,7 +13,7 @@ const eventRoutes = require("./routes/eventRoutes");
 const appointmentRoutes = require("./routes/appointmentRoutes");
 const blogRoutes = require("./routes/blogRoutes");
 const jobRoutes = require("./routes/jobRoutes");
-const auth = require("./routes/auth");
+const authRoutes = require("./routes/authRoutes");
 
 // Middleware
 app.use(bodyParser.json());
@@ -22,7 +22,7 @@ app.use(cors());
 app.use(express.urlencoded({ extended: false }));
 
 // Routes
-app.use("/auth", auth);
+app.use("/", authRoutes);
 app.use("/admin", adminRoutes);
 app.use("/user", userRoutes);
 app.use("/resource-person", resourcePersonRoutes);

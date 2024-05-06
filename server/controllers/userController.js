@@ -1,76 +1,62 @@
-const Users = require("../models/User");
+const userModel = require("../models/User");
 
 const userController = {
-	createUser: async (req, res) => {
+	getAllUsers: async (req, res) => {
 		try {
-			const userData = req.body;
-			const user = new Users(userData);
-			const userId = await Users.createUser(user);
-			res.status(201).json({ userId });
+			const users = await userModel.getAllUsers();
+			res.status(200).json(users);
 		} catch (error) {
-			res.status(500).json({ error: error.message });
+			console.error("Error fetching users:", error);
+			res.status(500).json({ error: "Error fetching users" });
+		}
+	},
+
+	getUserByUsername: async (req, res) => {
+		const { username } = req.params;
+		try {
+			const user = await userModel.getUserByUsername(username);
+			if (!user) {
+				return res.status(404).json({ error: "User not found" });
+			}
+			res.status(200).json(user);
+		} catch (error) {
+			console.error("Error fetching user:", error);
+			res.status(500).json({ error: "Error fetching user" });
+		}
+	},
+
+	getUserByCategory: async (req, res) => {
+		const { category } = req.params;
+		try {
+			const users = await userModel.getUserByCategory(category);
+			res.status(200).json(users);
+		} catch (error) {
+			console.error("Error fetching users by category:", error);
+			res.status(500).json({ error: "Error fetching users by category" });
 		}
 	},
 
 	updateUser: async (req, res) => {
+		const { username } = req.params;
+		const updatedFields = req.body;
+
 		try {
-			const { id } = req.params;
-			const userData = req.body;
-			const updated = await Users.updateUser(id, userData);
-			if (updated) {
-				res.status(200).json({ message: "User updated successfully" });
-			} else {
-				res.status(404).json({ error: "User not found" });
-			}
+			await userModel.updateUser(username, updatedFields);
+			res.status(200).json({ message: "User updated successfully" });
 		} catch (error) {
-			res.status(500).json({ error: error.message });
+			console.error("Error updating user:", error);
+			res.status(500).json({ error: "Error updating user" });
 		}
 	},
 
 	deleteUser: async (req, res) => {
+		const { username } = req.params;
 		try {
-			const { id } = req.params;
-			const deleted = await Users.deleteUser(id);
-			if (deleted) {
-				res.status(200).json({ message: "User deleted successfully" });
-			} else {
-				res.status(404).json({ error: "User not found" });
-			}
+			await userModel.deleteUser(username);
+			res.status(200).json({ message: "User deleted successfully" });
 		} catch (error) {
-			res.status(500).json({ error: error.message });
-		}
-	},
-
-	getUserById: async (req, res) => {
-		try {
-			const { id } = req.params;
-			const user = await Users.getUserById(id);
-			if (user) {
-				res.status(200).json(user);
-			} else {
-				res.status(404).json({ error: "User not found" });
-			}
-		} catch (error) {
-			res.status(500).json({ error: error.message });
-		}
-	},
-
-	getUsersByCategory: async (req, res) => {
-		try {
-			const { category } = req.params;
-			const users = await Users.getUsersByCategory(category);
-			res.status(200).json(users);
-		} catch (error) {
-			res.status(500).json({ error: error.message });
-		}
-	},
-
-	getAllUsers: async (req, res) => {
-		try {
-			const users = await Users.getAllUsers();
-			res.status(200).json(users);
-		} catch (error) {
-			res.status(500).json({ error: error.message });
+			console.error("Error deleting user:", error);
+			res.status(500).json({ error: "Error deleting user" });
 		}
 	},
 };

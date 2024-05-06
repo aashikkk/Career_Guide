@@ -30,10 +30,9 @@ function LoginForm() {
                         <form>
                             <InputText
                                 type={"text"}
-                                placeholder={"Email Address"}
-                                id={"EmailInputController33"}
-                                htmlFor={"EmailInputController3"}
-                                labelName={"Email Address"}
+                                placeholder={"Username"}
+                                id={"UsernameInputController33"}
+                                labelName={"Username"}
                             />
 
                             <InputText
