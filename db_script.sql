@@ -5,13 +5,13 @@ CREATE DATABASE IF NOT EXISTS career_guide;
 USE career_guide;
 
 -- Create the Admin table
-CREATE TABLE IF NOT EXISTS Admin (
-    id VARCHAR(50) PRIMARY KEY,
-    name VARCHAR(50) NOT NULL,
-    username VARCHAR(20) UNIQUE,
-    email VARCHAR(50) NOT NULL,
-    password VARCHAR(64) NOT NULL
-);
+-- CREATE TABLE IF NOT EXISTS Admin (
+--     id VARCHAR(50) PRIMARY KEY,
+--     name VARCHAR(50) NOT NULL,
+--     username VARCHAR(20) UNIQUE,
+--     email VARCHAR(50) NOT NULL,
+--     password VARCHAR(64) NOT NULL
+-- );
 
 -- Create the Appointment table
 CREATE TABLE IF NOT EXISTS Appointment (
@@ -50,19 +50,19 @@ CREATE TABLE IF NOT EXISTS Job (
 );
 
 -- Create the ResourcePerson table
-CREATE TABLE IF NOT EXISTS ResourcePerson (
-    id VARCHAR(50) PRIMARY KEY,
-    name VARCHAR(50) NOT NULL,
-    username VARCHAR(20) UNIQUE,
-    phoneNumber VARCHAR(15),
-    email VARCHAR(50) NOT NULL,
-    highestQualifications VARCHAR(255),
-    nic VARCHAR(13) NOT NULL,
-    age INT,
-    password VARCHAR(64) NOT NULL,
-    workExperience TEXT,
-    referees TEXT
-);
+-- CREATE TABLE IF NOT EXISTS ResourcePerson (
+--     id VARCHAR(50) PRIMARY KEY,
+--     name VARCHAR(50) NOT NULL,
+--     username VARCHAR(20) UNIQUE,
+--     phoneNumber VARCHAR(15),
+--     email VARCHAR(50) NOT NULL,
+--     highestQualifications VARCHAR(255),
+--     nic VARCHAR(13) NOT NULL,
+--     age INT,
+--     password VARCHAR(64) NOT NULL,
+--     workExperience TEXT,
+--     referees TEXT
+-- );
 
 -- For 3 Users
 CREATE TABLE IF NOT EXISTS Users (
@@ -75,7 +75,7 @@ CREATE TABLE IF NOT EXISTS Users (
     nic VARCHAR(13),
     age INT,
     password VARCHAR(64) NOT NULL,
-    category ENUM('SchoolStudent', 'Undergraduate', 'Graduate'),
+    category ENUM('SchoolStudent', 'Undergraduate', 'Graduate', 'Admin', 'Counseller'),
     grade VARCHAR(10),
     currentYear INT,
     educationLevel VARCHAR(255),

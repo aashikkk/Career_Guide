@@ -20,10 +20,25 @@ function LoginForm() {
 
 		try {
 			const response = await axios.post("/login", { username, password });
+			const { category } = response.data; // Assuming the response contains the user category
 			console.log(response.data);
 			// Assuming the response contains a token or some authentication info upon successful login
 			// Redirect to the dashboard page
-			navigate("/user");
+			switch (category) {
+				case "user":
+					navigate("/user");
+					break;
+				case "Admin":
+					navigate("/admin");
+					break;
+				case "Counseller":
+					navigate("/counseller");
+					break;
+				default:
+					// Handle unexpected category
+					console.error("Unknown user category:", category);
+					setError("Invalid user category. Please contact support.");
+			}
 		} catch (error) {
 			console.error("Login failed:", error);
 			setError("Invalid username or password. Please try again.");

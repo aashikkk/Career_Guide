@@ -71,14 +71,94 @@ async function loginUser(req, res) {
 			return res.status(401).json({ error: "Invalid username or password" });
 		}
 
+		// User authenticated successfully, get user category
+		const { category } = user[0];
+
 		// User authenticated successfully, generate JWT token
 		const token = generateAccessToken(user[0].id);
 
-		res.status(200).json({ message: "Login successful", token });
+		res.status(200).json({ message: "Login successful", token, category });
 	} catch (error) {
 		console.error("Error logging in:", error);
 		res.status(500).json({ error: "Internal server error" });
 	}
 }
 
-module.exports = { registerUser, loginUser };
+async function registerAdmin(req, res) {
+	const { name, username, email, password } = req.body;
+
+	try {
+		// Check if user already exists
+		const [existingUser] = await db
+			.promise()
+			.query("SELECT * FROM Users WHERE username = ? OR email = ? ", [
+				username,
+				email,
+			]);
+		if (existingUser.length > 0) {
+			return res.status(400).json({ error: "User already exists" });
+		}
+
+		// Hash password
+		const hashedPassword = await bcrypt.hash(password, saltRounds);
+
+		// Insert user into database
+		await db
+			.promise()
+			.query(
+				"INSERT INTO Users (id, name, username, email , password, category) VALUES (?, ?, ?, ?, ?, ?)",
+				[uuidv4(), name, username, email, hashedPassword, "Admin"]
+			);
+
+		res.status(201).json({ message: "Admin registered successfully" });
+	} catch (error) {
+		console.error("Error registering admin:", error);
+		res.status(500).json({ error: "Internal server error" });
+	}
+}
+
+async function registerCounseller(req, res) {
+	const { name, username, phoneNumber, email, nic, password, category } =
+		req.body;
+
+	try {
+		// Check if user already exists
+		const [existingUser] = await db
+			.promise()
+			.query("SELECT * FROM Users WHERE username = ? OR email = ? OR nic = ?", [
+				username,
+				email,
+				nic,
+			]);
+		if (existingUser.length > 0) {
+			return res.status(400).json({ error: "User already exists" });
+		}
+
+		// Hash password
+		const hashedPassword = await bcrypt.hash(password, saltRounds);
+
+		// Insert user into database
+		await db
+			.promise()
+			.query(
+				"INSERT INTO Users (id, name, username, phoneNumber, email, nic, password, category) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+				[
+					uuidv4(),
+					name,
+					username,
+					phoneNumber,
+					email,
+					nic,
+					hashedPassword,
+					"Counseller",
+				]
+			);
+
+		res.status(201).json({ message: "Counseller registered successfully" });
+	} catch (error) {
+		console.error("Error registering user:", error);
+		res.status(500).json({ error: "Internal server error" });
+	}
+}
+
+module.exports = { registerUser, loginUser, registerAdmin, registerCounseller };
