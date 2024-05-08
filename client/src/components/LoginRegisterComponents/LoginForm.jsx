@@ -25,7 +25,13 @@ function LoginForm() {
 			// Assuming the response contains a token or some authentication info upon successful login
 			// Redirect to the dashboard page
 			switch (category) {
-				case "user":
+				case "SchoolStudent":
+					navigate("/user");
+					break;
+				case "Undergraduate":
+					navigate("/user");
+					break;
+				case "Graduate":
 					navigate("/user");
 					break;
 				case "Admin":
