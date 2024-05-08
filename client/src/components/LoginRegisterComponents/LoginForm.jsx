@@ -10,18 +10,21 @@ import RegisterFailed from "./RegisterFailed";
 function LoginForm() {
 	initTWE({ Input, Ripple });
 	const navigate = useNavigate();
+	const [error, setError] = useState("");
 
 	const [username, setUsername] = useState("");
 	const [password, setPassword] = useState("");
-	const [error, setError] = useState("");
 
 	const handleLogin = async (e) => {
 		e.preventDefault();
 
 		try {
 			const response = await axios.post("/login", { username, password });
-			const { category } = response.data; // Assuming the response contains the user category
-			console.log(response.data);
+			const { category, token } = response.data; // Assuming the response contains the user category
+			// console.log(response.data);
+			console.log("Login Token is: " + token);
+			localStorage.setItem("token", token);
+			setError("");
 			// Assuming the response contains a token or some authentication info upon successful login
 			// Redirect to the dashboard page
 			switch (category) {
@@ -48,6 +51,9 @@ function LoginForm() {
 		} catch (error) {
 			console.error("Login failed:", error);
 			setError("Invalid username or password. Please try again.");
+			setTimeout(() => {
+				setError("");
+			}, 3000);
 		}
 	};
 

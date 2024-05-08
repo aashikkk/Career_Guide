@@ -6,7 +6,7 @@ const jwt = require("jsonwebtoken");
 const saltRounds = 10;
 
 const generateAccessToken = (userId) => {
-	return jwt.sign({ userId }, process.env.JWT_SECRET, { expiresIn: "1d" });
+	return jwt.sign({ userId }, process.env.JWT_SECRET, { expiresIn: "1h" });
 };
 
 async function registerUser(req, res) {
@@ -30,21 +30,20 @@ async function registerUser(req, res) {
 		const hashedPassword = await bcrypt.hash(password, saltRounds);
 
 		// Insert user into database
+		const sql =
+			"INSERT INTO Users (id, name, username, phoneNumber, email, nic, password, category) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 		await db
 			.promise()
-			.query(
-				"INSERT INTO Users (id, name, username, phoneNumber, email, nic, password, category) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
-				[
-					uuidv4(),
-					name,
-					username,
-					phoneNumber,
-					email,
-					nic,
-					hashedPassword,
-					category,
-				]
-			);
+			.query(sql, [
+				uuidv4(),
+				name,
+				username,
+				phoneNumber,
+				email,
+				nic,
+				hashedPassword,
+				category,
+			]);
 
 		res.status(201).json({ message: "User registered successfully" });
 	} catch (error) {
@@ -61,6 +60,13 @@ async function loginUser(req, res) {
 		const [user] = await db
 			.promise()
 			.query("SELECT * FROM Users WHERE username = ?", [username]);
+
+		if (!username || !password) {
+			return res
+				.status(400)
+				.json({ message: "Username and Password are Required" });
+		}
+
 		if (user.length === 0) {
 			return res.status(401).json({ error: "Invalid username or password" });
 		}
@@ -68,19 +74,40 @@ async function loginUser(req, res) {
 		// Check password
 		const passwordMatch = await bcrypt.compare(password, user[0].password);
 		if (!passwordMatch) {
-			return res.status(401).json({ error: "Invalid username or password" });
+			return res.status(401).json({ error: "Invalid password" });
+		} else {
+			// User authenticated successfully, get user category
+			const { category } = user[0];
+
+			// User authenticated successfully, generate JWT token
+			const token = generateAccessToken(user[0].id);
+			res.status(200).json({ message: "Login successful", token, category });
 		}
-
-		// User authenticated successfully, get user category
-		const { category } = user[0];
-
-		// User authenticated successfully, generate JWT token
-		const token = generateAccessToken(user[0].id);
-
-		res.status(200).json({ message: "Login successful", token, category });
 	} catch (error) {
 		console.error("Error logging in:", error);
 		res.status(500).json({ error: "Internal server error" });
+	}
+}
+
+//Authentication Middleware using JWT
+
+async function authenticate(req, res, next) {
+	const token = req.header("Authorization");
+	console.log("Unextracted Token: " + token);
+
+	if (!token) {
+		return res.status(401).json({ message: "Unauthorized" });
+	}
+	const extractedToken = token.split(" ")[1];
+	console.log("Actual Token: " + extractedToken);
+
+	try {
+		// /verift and validate our token
+		const decoded = jwt.verify(extractedToken, process.env.JWT_SECRET);
+		req.userId = decoded.userId;
+		next();
+	} catch (err) {
+		res.status(401).json({ message: "Invalid Token" });
 	}
 }
 
@@ -103,12 +130,11 @@ async function registerAdmin(req, res) {
 		const hashedPassword = await bcrypt.hash(password, saltRounds);
 
 		// Insert user into database
+		const sql =
+			"INSERT INTO Users (id, name, username, email , password, category) VALUES (?, ?, ?, ?, ?, ?)";
 		await db
 			.promise()
-			.query(
-				"INSERT INTO Users (id, name, username, email , password, category) VALUES (?, ?, ?, ?, ?, ?)",
-				[uuidv4(), name, username, email, hashedPassword, "Admin"]
-			);
+			.query(sql, [uuidv4(), name, username, email, hashedPassword, "Admin"]);
 
 		res.status(201).json({ message: "Admin registered successfully" });
 	} catch (error) {
@@ -138,21 +164,20 @@ async function registerCounseller(req, res) {
 		const hashedPassword = await bcrypt.hash(password, saltRounds);
 
 		// Insert user into database
+		const sql =
+			"INSERT INTO Users (id, name, username, phoneNumber, email, nic, password, category) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 		await db
 			.promise()
-			.query(
-				"INSERT INTO Users (id, name, username, phoneNumber, email, nic, password, category) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
-				[
-					uuidv4(),
-					name,
-					username,
-					phoneNumber,
-					email,
-					nic,
-					hashedPassword,
-					"Counseller",
-				]
-			);
+			.query(sql, [
+				uuidv4(),
+				name,
+				username,
+				phoneNumber,
+				email,
+				nic,
+				hashedPassword,
+				"Counseller",
+			]);
 
 		res.status(201).json({ message: "Counseller registered successfully" });
 	} catch (error) {
@@ -161,4 +186,10 @@ async function registerCounseller(req, res) {
 	}
 }
 
-module.exports = { registerUser, loginUser, registerAdmin, registerCounseller };
+module.exports = {
+	registerUser,
+	loginUser,
+	registerAdmin,
+	registerCounseller,
+	authenticate,
+};

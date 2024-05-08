@@ -13,6 +13,7 @@ import UserDashboardPage from "./pages/UserDashboardPage";
 import CounsellerDashboardPage from "./pages/CounsellerDashboardPage";
 import EditableTable from "./components/TableEditable";
 import ViewableTable from "./components/TableViewable";
+import { useState, useEffect } from "react";
 
 const router = createBrowserRouter([
 	{
@@ -102,6 +103,32 @@ const router = createBrowserRouter([
 ]);
 
 function App() {
+	const [loggedIn, setLoggedIn] = useState(false);
+
+	const authenticate = async () => {
+		try {
+			const token = localStorage.getItem("token");
+			console.log(token);
+			if (token) {
+				setLoggedIn(true);
+			} else {
+				setLoggedIn(false);
+			}
+		} catch (err) {
+			console.log(err);
+			setLoggedIn(false);
+		}
+	};
+
+	useEffect(() => {
+		authenticate();
+	}, []);
+
+	const handleLogout = () => {
+		localStorage.removeItem("token");
+		setLoggedIn(false);
+	};
+
 	return <RouterProvider router={router} />;
 }
 

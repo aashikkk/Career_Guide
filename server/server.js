@@ -31,19 +31,6 @@ app.use("/appointment", appointmentRoutes);
 app.use("/blog", blogRoutes);
 app.use("/job", jobRoutes);
 
-// app.use((req, res, next) => {
-//   console.log("Incoming Request:");
-//   console.log("Method:", req.method);
-//   console.log("URL:", req.url);
-//   console.log("Headers:", req.headers);
-
-//   if (req.cookies) {
-//     console.log("Cookies:", req.cookies);
-//   }
-
-//   next();
-// });
-
 const PORT = process.env.PORT;
 
 app.listen(PORT, () => {

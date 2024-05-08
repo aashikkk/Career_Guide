@@ -1,6 +1,7 @@
 import React from "react";
 import { Navbar } from "flowbite-react";
 import NavItem from "../NavBarItem";
+import handleLogout from "../../App";
 
 function UserNavBar() {
 	return (
@@ -13,10 +14,13 @@ function UserNavBar() {
 						// link={"viewAppointments"}
 						text={"View my Appointments"}
 					/>
-					<NavItem
-						link={"logout"}
-						text={"Logout"}
-					/>
+					{
+						<NavItem
+							onClick={handleLogout}
+							link={"/login"}
+							text={"Logout"}
+						/>
+					}
 				</Navbar.Collapse>
 			</Navbar>
 		</div>
