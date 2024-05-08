@@ -1,69 +1,97 @@
-import React from "react";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import axios from "../../axios";
 import { Input, Ripple, initTWE } from "tw-elements";
 import RememberMeCheckBox from "./RememberMeCheckBox";
 import Button from "./Button";
 import InputText from "./InputText";
+import RegisterFailed from "./RegisterFailed";
 
 function LoginForm() {
-    initTWE({ Input, Ripple });
+	initTWE({ Input, Ripple });
+	const navigate = useNavigate();
 
-    return (
-        <section className="h-4/5">
-            <h2 className="mb-4 pt-8 text-4xl tracking-tight font-extrabold text-center text-gray-900 dark:text-white">
-                Login to your account
-            </h2>
-            <div className="container h-full px-6 py-12">
-                <div className="flex h-full flex-wrap items-center justify-center lg:justify-between">
-                    {/* <!-- Left column container with background--> */}
+	const [username, setUsername] = useState("");
+	const [password, setPassword] = useState("");
+	const [error, setError] = useState("");
 
-                    <div className="shrink-1 mb-12 grow-0 basis-auto md:mb-0 md:w-9/12 md:shrink-0 lg:w-6/12 xl:w-6/12">
-                        <img
-                            src="https://img.freepik.com/premium-vector/welcome-back-lettering-door-plaque-welcome-back-hanging-sign-board-concept-welcoming-home_497399-46.jpg"
-                            className="w-8//12"
-                            alt="Welcome Back image"
-                        />
-                    </div>
+	const handleLogin = async (e) => {
+		e.preventDefault();
 
-                    {/* <!-- Right column container with form --> */}
+		try {
+			const response = await axios.post("/login", { username, password });
+			console.log(response.data);
+			// Assuming the response contains a token or some authentication info upon successful login
+			// Redirect to the dashboard page
+			navigate("/user");
+		} catch (error) {
+			console.error("Login failed:", error);
+			setError("Invalid username or password. Please try again.");
+		}
+	};
 
-                    <div className="md:w-8/12 lg:ms-6 lg:w-5/12">
-                        <form>
-                            <InputText
-                                type={"text"}
-                                placeholder={"Username"}
-                                id={"UsernameInputController33"}
-                                labelName={"Username"}
-                            />
+	return (
+		<section className="h-4/5">
+			<h2 className="mb-4 pt-8 text-4xl tracking-tight font-extrabold text-center text-gray-900 dark:text-white">
+				Login to your account
+			</h2>
+			<div className="container h-full px-6 py-12">
+				<div className="flex h-full flex-wrap items-center justify-center lg:justify-between">
+					{/* <!-- Left column container with background--> */}
 
-                            <InputText
-                                type={"password"}
-                                placeholder={"Password"}
-                                // id={"PwdInputController33"}
-                                // htmlFor={"PwdInputController3"}
-                                labelName={"Password"}
-                            />
+					<div className="shrink-1 mb-12 grow-0 basis-auto md:mb-0 md:w-9/12 md:shrink-0 lg:w-6/12 xl:w-6/12">
+						<img
+							src="https://img.freepik.com/premium-vector/welcome-back-lettering-door-plaque-welcome-back-hanging-sign-board-concept-welcoming-home_497399-46.jpg"
+							className="w-8//12"
+							alt="Welcome Back image"
+						/>
+					</div>
 
-                            <RememberMeCheckBox showForgotPwd={true} />
+					{/* <!-- Right column container with form --> */}
 
-                            {/* <!-- Submit button --> */}
-                            <Button type={"submit"} BtnName={"Login"} />
+					<div className="md:w-8/12 lg:ms-6 lg:w-5/12">
+						<form onSubmit={handleLogin}>
+							<InputText
+								type={"text"}
+								placeholder={"Username"}
+								labelName={"Username"}
+								value={username}
+								onChange={setUsername}
+							/>
 
-                            {/* <!-- Register link -->Name */}
-                            <p className="mb-0 mt-2 pt-1 text-sm font-semibold">
-                                Don&apos;t have an account? &nbsp;
-                                <a
-                                    href="/register"
-                                    className="text-danger transition duration-150 ease-in-out hover:text-danger-600 focus:text-danger-600 active:text-danger-700"
-                                >
-                                    Register
-                                </a>
-                            </p>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </section>
-    );
+							<InputText
+								type={"password"}
+								placeholder={"Password"}
+								labelName={"Password"}
+								value={password}
+								onChange={setPassword}
+							/>
+
+							<RememberMeCheckBox showForgotPwd={true} />
+							{error && <p className="text-red-500 mt-2">{error}</p>}
+							{/* {error && <RegisterFailed errorMsg={error} />} */}
+
+							{/* <!-- Submit button --> */}
+							<Button
+								type={"submit"}
+								BtnName={"Login"}
+							/>
+
+							{/* <!-- Register link -->Name */}
+							<p className="mb-0 mt-2 pt-1 text-sm font-semibold">
+								Don&apos;t have an account? &nbsp;
+								<a
+									href="/register"
+									className="text-danger transition duration-150 ease-in-out hover:text-danger-600 focus:text-danger-600 active:text-danger-700">
+									Register
+								</a>
+							</p>
+						</form>
+					</div>
+				</div>
+			</div>
+		</section>
+	);
 }
 
 export default LoginForm;
