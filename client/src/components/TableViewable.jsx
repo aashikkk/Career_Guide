@@ -3,7 +3,7 @@ import { Table } from "flowbite-react";
 
 function ViewableTable() {
 	return (
-		<div className="overflow-x-auto px-12 py-10 ">
+		<div className="overflow-x-auto px-15 py-12 ">
 			<Table striped>
 				<Table.Head>
 					<Table.HeadCell>Product name</Table.HeadCell>
