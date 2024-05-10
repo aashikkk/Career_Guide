@@ -1,68 +1,63 @@
 const Job = require("../models/Job");
 
 const jobController = {
-  createJob: async (req, res) => {
-    try {
-      const { jobTitle, type, company, location } = req.body;
-      const job = new Job(null, jobTitle, type, company, location);
-      const jobId = await Job.createJob(job);
-      res.status(201).json({ jobId });
-    } catch (error) {
-      res.status(500).json({ error: error.message });
-    }
-  },
+	createJob: async (req, res) => {
+		const { jobTitle, type, company, location } = req.body;
 
-  updateJob: async (req, res) => {
-    try {
-      const { id } = req.params;
-      const jobData = req.body;
-      const updated = await Job.updateJob(id, jobData);
-      if (updated) {
-        res.status(200).json({ message: "Job updated successfully" });
-      } else {
-        res.status(404).json({ error: "Job not found" });
-      }
-    } catch (error) {
-      res.status(500).json({ error: error.message });
-    }
-  },
+		try {
+			await Job.createJob(jobTitle, type, company, location);
+			res.status(201).json({ message: "Job created successfully" });
+		} catch (error) {
+			console.error("Error creating job:", error);
+			res.status(500).json({ error: "Internal server error" });
+		}
+	},
 
-  deleteJob: async (req, res) => {
-    try {
-      const { id } = req.params;
-      const deleted = await Job.deleteJob(id);
-      if (deleted) {
-        res.status(200).json({ message: "Job deleted successfully" });
-      } else {
-        res.status(404).json({ error: "Job not found" });
-      }
-    } catch (error) {
-      res.status(500).json({ error: error.message });
-    }
-  },
+	updateJobById: async (req, res) => {
+		const { id } = req.params;
+		const jobData = req.body;
 
-  getJobById: async (req, res) => {
-    try {
-      const { id } = req.params;
-      const job = await Job.getJobById(id);
-      if (job) {
-        res.status(200).json(job);
-      } else {
-        res.status(404).json({ error: "Job not found" });
-      }
-    } catch (error) {
-      res.status(500).json({ error: error.message });
-    }
-  },
+		try {
+			await Job.updateJobById(id, jobData);
+			res.status(200).json({ message: "Job updated successfully" });
+		} catch (error) {
+			res.status(404).json({ error: "Job not found" });
+			res.status(500).json({ error: error.message });
+		}
+	},
 
-  getAllJobs: async (req, res) => {
-    try {
-      const jobs = await Job.getAllJobs();
-      res.status(200).json(jobs);
-    } catch (error) {
-      res.status(500).json({ error: error.message });
-    }
-  },
+	deleteJobById: async (req, res) => {
+		const { id } = req.params;
+
+		try {
+			await Job.deleteJobById(id);
+			res.status(200).json({ message: "Job deleted successfully" });
+		} catch (error) {
+			res.status(404).json({ error: "Job not found" });
+			res.status(500).json({ error: error.message });
+		}
+	},
+
+	getJobById: async (req, res) => {
+		const { id } = req.params;
+
+		try {
+			const job = await Job.getJobById(id);
+			res.status(200).json(job);
+		} catch (error) {
+			res.status(404).json({ error: "Job not found" });
+			res.status(500).json({ error: error.message });
+		}
+	},
+
+	getAllJobs: async (req, res) => {
+		try {
+			const jobs = await Job.getAllJobs();
+			res.status(200).json(jobs);
+		} catch (error) {
+			res.status(500).json({ error: error.message });
+		}
+	},
 };
 
 module.exports = jobController;

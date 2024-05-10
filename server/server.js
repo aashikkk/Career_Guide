@@ -7,12 +7,10 @@ const cors = require("cors");
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 
 // Import route files
-const adminRoutes = require("./routes/adminRoutes");
 const userRoutes = require("./routes/userRoute");
-const resourcePersonRoutes = require("./routes/resourcePersonRoutes");
 const eventRoutes = require("./routes/eventRoutes");
-const appointmentRoutes = require("./routes/appointmentRoutes");
-const blogRoutes = require("./routes/blogRoutes");
+// const appointmentRoutes = require("./routes/appointmentRoutes");
+// const blogRoutes = require("./routes/blogRoutes");
 const jobRoutes = require("./routes/jobRoutes");
 const authRoutes = require("./routes/authRoutes");
 const stripRoutes = require("./routes/stripeRoute");
@@ -25,12 +23,10 @@ app.use(express.urlencoded({ extended: false }));
 
 // Routes
 app.use("/", authRoutes);
-app.use("/admin", adminRoutes);
 app.use("/user", userRoutes);
-app.use("/resource-person", resourcePersonRoutes);
 app.use("/event", eventRoutes);
-app.use("/appointment", appointmentRoutes);
-app.use("/blog", blogRoutes);
+// app.use("/appointment", appointmentRoutes);
+// app.use("/blog", blogRoutes);
 app.use("/job", jobRoutes);
 app.use("/pay", stripRoutes);
 

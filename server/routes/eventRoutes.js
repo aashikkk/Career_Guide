@@ -3,8 +3,8 @@ const router = express.Router();
 const eventController = require("../controllers/eventController");
 
 router.post("/", eventController.createEvent);
-router.put("/:id", eventController.updateEvent);
-router.delete("/:id", eventController.deleteEvent);
+router.put("/:id", eventController.updateEventById);
+router.delete("/:id", eventController.deleteEventById);
 router.get("/:id", eventController.getEventById);
 router.get("/", eventController.getAllEvents);
 

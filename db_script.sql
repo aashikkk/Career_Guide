@@ -15,7 +15,7 @@ USE career_guide;
 
 -- Create the Appointment table
 CREATE TABLE IF NOT EXISTS Appointment (
-    id VARCHAR(50) PRIMARY KEY,
+    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     dateTime DATETIME,
     resourcePerson VARCHAR(50),
     attendeeUser VARCHAR(50)
@@ -23,14 +23,14 @@ CREATE TABLE IF NOT EXISTS Appointment (
 
 -- Create the Blog table
 CREATE TABLE IF NOT EXISTS Blog (
-    id VARCHAR(50) PRIMARY KEY,
+    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     title VARCHAR(255) NOT NULL,
     description TEXT
 );
 
 -- Create the Event table
 CREATE TABLE IF NOT EXISTS Event (
-    id VARCHAR(50) PRIMARY KEY,
+    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,,
     title VARCHAR(255) NOT NULL,
     date DATE,
     time TIME,
@@ -42,7 +42,7 @@ CREATE TABLE IF NOT EXISTS Event (
 
 -- Create the Job table
 CREATE TABLE IF NOT EXISTS Job (
-    id VARCHAR(50) PRIMARY KEY,
+    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     jobTitle VARCHAR(50) NOT NULL,
     type VARCHAR(60),
     company VARCHAR(50),

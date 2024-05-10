@@ -1,62 +1,63 @@
 const db = require("../db");
 
-class Event {
-  constructor(id, title, date, time, resourcePerson, location) {
-    this.id = id;
-    this.title = title;
-    this.date = date;
-    this.time = time;
-    this.resourcePerson = resourcePerson;
-    this.location = location;
-  }
+const event = {
+	getAllEvents: async () => {
+		try {
+			const [events] = await db.promise().query("SELECT * FROM Event");
+			return events;
+		} catch (error) {
+			throw error;
+		}
+	},
 
-  static getAllEvents() {
-    return new Promise((resolve, reject) => {
-      db.query("SELECT * FROM events", (error, results) => {
-        if (error) {
-          return reject(error);
-        }
-        resolve(results);
-      });
-    });
-  }
+	createEvent: async (title, date, time, resourcePerson, location) => {
+		try {
+			// Insert event into database
+			const sql =
+				"INSERT INTO Event (title, date, time, resourcePerson, location) VALUES (?, ?, ?, ?, ?)";
+			await db
+				.promise()
+				.query(sql, [title, date, time, resourcePerson, location]);
 
-  static createEvent(event) {
-    return new Promise((resolve, reject) => {
-      db.query("INSERT INTO events SET ?", event, (error, results) => {
-        if (error) {
-          return reject(error);
-        }
-        resolve({ id: results.insertId, ...event });
-      });
-    });
-  }
+			return { message: "Event created successfully" };
+		} catch (error) {
+			throw error;
+		}
+	},
 
-  static updateEvent(id, event) {
-    return new Promise((resolve, reject) => {
-      db.query(
-        "UPDATE events SET ? WHERE id = ?",
-        [event, id],
-        (error, results) => {
-          if (error) {
-            return reject(error);
-          }
-          resolve({ id: id, ...event });
-        },
-      );
-    });
-  }
+	getEventById: async (eventId) => {
+		try {
+			const [event] = await db
+				.promise()
+				.query("SELECT * FROM Event WHERE id = ?", [eventId]);
+			return event[0]; // Assuming event ID is unique
+		} catch (error) {
+			throw error;
+		}
+	},
 
-  static deleteEvent(id) {
-    return new Promise((resolve, reject) => {
-      db.query("DELETE FROM events WHERE id = ?", id, (error, results) => {
-        if (error) {
-          return reject(error);
-        }
-        resolve(results.affectedRows);
-      });
-    });
-  }
-}
+	updateEventById: async (eventId, updatedFields) => {
+		try {
+			const updateQuery =
+				"UPDATE Event SET " +
+				Object.keys(updatedFields)
+					.map((key) => `${key} = ?`)
+					.join(", ") +
+				" WHERE id = ?";
+			const updateValues = [...Object.values(updatedFields), eventId];
+			await db.promise().query(updateQuery, updateValues);
+		} catch (error) {
+			throw error;
+		}
+	},
 
-module.exports = Event;
+	deleteEventById: async (eventId) => {
+		try {
+			await db.promise().query("DELETE FROM Event WHERE id = ?", [eventId]);
+		} catch (error) {
+			throw error;
+		}
+	},
+};
+
+module.exports = event;
