@@ -1,59 +1,60 @@
-// const db = require("../db");
+const db = require("../db");
 
-// class Blog {
-//   constructor(id, title, desc) {
-//     this.id = id;
-//     this.title = title;
-//     this.desc = desc;
-//   }
+const blog = {
+	getAllBlogs: async () => {
+		try {
+			const [blogs] = await db.promise().query("SELECT * FROM Blog");
+			return blogs;
+		} catch (error) {
+			throw error;
+		}
+	},
 
-//   static getAllBlogs() {
-//     return new Promise((resolve, reject) => {
-//       db.query("SELECT * FROM blogs", (error, results) => {
-//         if (error) {
-//           return reject(error);
-//         }
-//         resolve(results);
-//       });
-//     });
-//   }
+	createBlog: async (title, description, coverPic) => {
+		try {
+			// Insert blog into database
+			const sql =
+				"INSERT INTO Blog (title, description, coverPic) VALUES (?, ?, ?)";
+			await db.promise().query(sql, [title, description, coverPic]);
+			return { message: "Blog created successfully" };
+		} catch (error) {
+			throw error;
+		}
+	},
 
-//   static createBlog(blog) {
-//     return new Promise((resolve, reject) => {
-//       db.query("INSERT INTO blogs SET ?", blog, (error, results) => {
-//         if (error) {
-//           return reject(error);
-//         }
-//         resolve({ id: results.insertId, ...blog });
-//       });
-//     });
-//   }
+	getBlogById: async (blogId) => {
+		try {
+			const [blog] = await db
+				.promise()
+				.query("SELECT * FROM Blog WHERE id = ?", [blogId]);
+			return blog[0]; // Assuming blog ID is unique
+		} catch (error) {
+			throw error;
+		}
+	},
 
-//   static updateBlog(id, blog) {
-//     return new Promise((resolve, reject) => {
-//       db.query(
-//         "UPDATE blogs SET ? WHERE id = ?",
-//         [blog, id],
-//         (error, results) => {
-//           if (error) {
-//             return reject(error);
-//           }
-//           resolve({ id: id, ...blog });
-//         },
-//       );
-//     });
-//   }
+	updateBlogById: async (blogId, updatedFields) => {
+		try {
+			const updateQuery =
+				"UPDATE Blog SET " +
+				Object.keys(updatedFields)
+					.map((key) => `${key} = ?`)
+					.join(", ") +
+				" WHERE id = ?";
+			const updateValues = [...Object.values(updatedFields), blogId];
+			await db.promise().query(updateQuery, updateValues);
+		} catch (error) {
+			throw error;
+		}
+	},
 
-//   static deleteBlog(id) {
-//     return new Promise((resolve, reject) => {
-//       db.query("DELETE FROM blogs WHERE id = ?", id, (error, results) => {
-//         if (error) {
-//           return reject(error);
-//         }
-//         resolve(results.affectedRows);
-//       });
-//     });
-//   }
-// }
+	deleteBlogById: async (blogId) => {
+		try {
+			await db.promise().query("DELETE FROM Blog WHERE id = ?", [blogId]);
+		} catch (error) {
+			throw error;
+		}
+	},
+};
 
-// module.exports = Blog;
+module.exports = blog;

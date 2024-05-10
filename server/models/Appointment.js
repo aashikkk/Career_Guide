@@ -1,68 +1,76 @@
-// const db = require("../db");
+const db = require("../db");
 
-// class Appointment {
-//   constructor(id, dateTime, resourcePerson, attendeeUser) {
-//     this.id = id;
-//     this.dateTime = dateTime;
-//     this.resourcePerson = resourcePerson;
-//     this.attendeeUser = attendeeUser;
-//   }
+const Appointment = {
+	getAllAppointments: async () => {
+		try {
+			const [appointments] = await db
+				.promise()
+				.query("SELECT * FROM Appointment");
+			return appointments;
+		} catch (error) {
+			throw error;
+		}
+	},
 
-//   static getAllAppointments() {
-//     return new Promise((resolve, reject) => {
-//       db.query("SELECT * FROM appointments", (error, results) => {
-//         if (error) {
-//           return reject(error);
-//         }
-//         resolve(results);
-//       });
-//     });
-//   }
+	createAppointment: async (date, time, resourcePerson, attendeeUser) => {
+		try {
+			// Insert appointment into database
+			const sql =
+				"INSERT INTO Appointment (date, time, resourcePerson, attendeeUser) VALUES (?, ?, ?, ?)";
+			await db.promise().query(sql, [date, time, resourcePerson, attendeeUser]);
+			return { message: "Appointment created successfully" };
+		} catch (error) {
+			throw error;
+		}
+	},
 
-//   static createAppointment(appointment) {
-//     return new Promise((resolve, reject) => {
-//       db.query(
-//         "INSERT INTO appointments SET ?",
-//         appointment,
-//         (error, results) => {
-//           if (error) {
-//             return reject(error);
-//           }
-//           resolve({ id: results.insertId, ...appointment });
-//         },
-//       );
-//     });
-//   }
+	getAppointmentsByAttendee: async (attendeeUser) => {
+		try {
+			const [appointments] = await db
+				.promise()
+				.query("SELECT * FROM Appointment WHERE attendeeUser = ?", [
+					attendeeUser,
+				]);
+			return appointments;
+		} catch (error) {
+			throw error;
+		}
+	},
 
-//   static updateAppointment(id, updatedAppointment) {
-//     return new Promise((resolve, reject) => {
-//       db.query(
-//         "UPDATE appointments SET ? WHERE id = ?",
-//         [updatedAppointment, id],
-//         (error, results) => {
-//           if (error) {
-//             return reject(error);
-//           }
-//           resolve({ id: id, ...updatedAppointment });
-//         },
-//       );
-//     });
-//   }
+	getAppointmentById: async (appointmentId) => {
+		try {
+			const [appointments] = await db
+				.promise()
+				.query("SELECT * FROM Appointment WHERE id = ?", [appointmentId]);
+			return appointments[0];
+		} catch (error) {
+			throw error;
+		}
+	},
 
-//   static async deleteAppointment(id) {
-//     return new Promise((resolve, reject) => {
-//       db.query(
-//         "DELETE FROM appointments WHERE id = ?",
-//         id,
-//         (error, results) => {
-//           if (error) {
-//             return reject(error);
-//           }
-//           resolve(results.affectedRows);
-//         },
-//       );
-//     });
-//   }
-// }
+	updateAppointmentById: async (appointmentId, updatedFields) => {
+		try {
+			const updateQuery =
+				"UPDATE Appointment SET " +
+				Object.keys(updatedFields)
+					.map((key) => `${key} = ?`)
+					.join(", ") +
+				" WHERE id = ?";
+			const updateValues = [...Object.values(updatedFields), appointmentId];
+			await db.promise().query(updateQuery, updateValues);
+		} catch (error) {
+			throw error;
+		}
+	},
 
-// module.exports = Appointment;
+	deleteAppointmentById: async (appointmentId) => {
+		try {
+			await db
+				.promise()
+				.query("DELETE FROM Appointment WHERE id = ?", [appointmentId]);
+		} catch (error) {
+			throw error;
+		}
+	},
+};
+module.exports = Appointment;

@@ -16,7 +16,8 @@ USE career_guide;
 -- Create the Appointment table
 CREATE TABLE IF NOT EXISTS Appointment (
     id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    dateTime DATETIME,
+    date DATE,
+    time TIME,
     resourcePerson VARCHAR(50),
     attendeeUser VARCHAR(50)
 );
@@ -24,7 +25,7 @@ CREATE TABLE IF NOT EXISTS Appointment (
 -- Create the Blog table
 CREATE TABLE IF NOT EXISTS Blog (
     id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    title VARCHAR(255) NOT NULL,
+    coverPic MEDIUMBLOB DEFAULT NULL,
     description TEXT
 );
 
