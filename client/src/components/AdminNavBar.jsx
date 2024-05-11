@@ -26,10 +26,6 @@ function AdminNavBar() {
 						text={"Blog"}
 					/>
 					<NavItem
-						link={"manageBlogs"}
-						text={"Blog"}
-					/>
-					<NavItem
 						link={"logout"}
 						text={"Logout"}
 					/>

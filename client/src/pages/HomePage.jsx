@@ -8,17 +8,17 @@ import JobsBanner from "../components/HomeScreenComponents/JobsBanner";
 import NavBar from "../components/NavBar";
 
 function HomePage() {
-    return (
-        <>
-            <NavBar />
-            <CareerRegBanner />
-            <CounsellerBanner />
-            <EventCalender />
-            <JobsBanner />
-            <BlogArticles />
-            <FooterBar />
-        </>
-    );
+	return (
+		<>
+			<NavBar />
+			<CareerRegBanner />
+			<CounsellerBanner />
+			<EventCalender />
+			<JobsBanner />
+			<BlogArticles />
+			<FooterBar />
+		</>
+	);
 }
 
 export default HomePage;

@@ -14,7 +14,7 @@ import CounsellerDashboardPage from "./pages/CounsellerDashboardPage";
 import EditableTable from "./components/TableEditable";
 import ViewableTable from "./components/TableViewable";
 import { useState, useEffect } from "react";
-import StripePaymentPage from "./pages/StripePaymentPage";
+// import StripePaymentPage from "./pages/StripePaymentPage";
 
 const router = createBrowserRouter([
 	{
@@ -101,10 +101,10 @@ const router = createBrowserRouter([
 			},
 		],
 	},
-	{
-		path: "/pay",
-		element: <StripePaymentPage />,
-	},
+	// {
+	// 	path: "/pay",
+	// 	element: <StripePaymentPage />,
+	// },
 ]);
 
 function App() {

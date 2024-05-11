@@ -81,7 +81,8 @@ CREATE TABLE IF NOT EXISTS Users (
     currentYear INT,
     educationLevel VARCHAR(255),
     majorField VARCHAR(255),
-    GraduateYear INT
+    GraduateYear INT,
+    specialization VARCHAR(100)
 );
 
 
