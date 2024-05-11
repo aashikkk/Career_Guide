@@ -11,9 +11,15 @@ import AdminDashboardPage from "./pages/AdminDashboardPage";
 import RegisterSuccessPage from "./pages/RegisterSuccessPage";
 import UserDashboardPage from "./pages/UserDashboardPage";
 import CounsellerDashboardPage from "./pages/CounsellerDashboardPage";
-import EditableTable from "./components/TableEditable";
 import ViewableTable from "./components/TableViewable";
 import { useState, useEffect } from "react";
+import EditableTableEvent from "./components/TableEditableEvent";
+import EditableTableCounseller from "./components/TableEditableCounseller";
+import EditableTableAppointment from "./components/TableEditableAppointment";
+import PaymentSuccessPage from "./pages/PaymentSuccessPage";
+import PaymentCancelPage from "./pages/PaymentCancelPage";
+import EditableTableBlog from "./components/TableEditableBlog";
+import EditableTableJobs from "./components/TableEditableJobs";
 // import StripePaymentPage from "./pages/StripePaymentPage";
 
 const router = createBrowserRouter([
@@ -53,6 +59,14 @@ const router = createBrowserRouter([
 				path: "register/success",
 				element: <RegisterSuccessPage />,
 			},
+			{
+				path: "paymentSuccess",
+				element: <PaymentSuccessPage />,
+			},
+			{
+				path: "paymentCancel",
+				element: <PaymentCancelPage />,
+			},
 		],
 	},
 	{
@@ -61,15 +75,27 @@ const router = createBrowserRouter([
 		children: [
 			{
 				index: true,
-				element: <EditableTable />,
+				element: <EditableTableEvent />,
 			},
 			{
 				path: "manageEvents",
-				element: <EditableTable />,
+				element: <EditableTableEvent />,
 			},
 			{
 				path: "manageResourcePersons",
-				element: <EditableTable />,
+				element: <EditableTableCounseller />,
+			},
+			{
+				path: "manageAppointments",
+				element: <EditableTableAppointment />,
+			},
+			{
+				path: "manageBlogs",
+				element: <EditableTableBlog />,
+			},
+			{
+				path: "manageJobs",
+				element: <EditableTableJobs />,
 			},
 		],
 	},
@@ -101,10 +127,6 @@ const router = createBrowserRouter([
 			},
 		],
 	},
-	// {
-	// 	path: "/pay",
-	// 	element: <StripePaymentPage />,
-	// },
 ]);
 
 function App() {

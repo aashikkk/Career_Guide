@@ -32,6 +32,48 @@ const user = {
 		}
 	},
 
+	getUserByIdOfCounseller: async (id) => {
+		try {
+			const [user] = await db
+				.promise()
+				.query("SELECT * FROM Users WHERE id = ? AND category = ?", [
+					id,
+					"Counseller",
+				]);
+			return user[0];
+		} catch (error) {
+			throw error;
+		}
+	},
+
+	updateUserByIdOfCounseller: async (id, updatedFields) => {
+		try {
+			const updateQuery =
+				"UPDATE Users SET " +
+				Object.keys(updatedFields)
+					.map((key) => `${key} = ?`)
+					.join(", ") +
+				" WHERE id = ? AND category = ?";
+			const updateValues = [...Object.values(updatedFields), id, "Counseller"];
+			await db.promise().query(updateQuery, updateValues);
+		} catch (error) {
+			throw error;
+		}
+	},
+
+	deleteUserByIdOfCounseller: async (id) => {
+		try {
+			await db
+				.promise()
+				.query("DELETE FROM Users WHERE id = ? AND category = ?", [
+					id,
+					"Counseller",
+				]);
+		} catch (error) {
+			throw error;
+		}
+	},
+
 	updateUser: async (username, updatedFields) => {
 		try {
 			const updateQuery =

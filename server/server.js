@@ -4,7 +4,6 @@ dotenv.config({ override: true });
 const app = express();
 const bodyParser = require("body-parser");
 const cors = require("cors");
-const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 
 // Import route files
 const userRoutes = require("./routes/userRoute");

@@ -31,11 +31,10 @@ async function registerUser(req, res) {
 
 		// Insert user into database
 		const sql =
-			"INSERT INTO Users (id, name, username, phoneNumber, email, nic, password, category) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+			"INSERT INTO Users (name, username, phoneNumber, email, nic, password, category) VALUES (?, ?, ?, ?, ?, ?, ?)";
 		await db
 			.promise()
 			.query(sql, [
-				uuidv4(),
 				name,
 				username,
 				phoneNumber,
@@ -131,10 +130,10 @@ async function registerAdmin(req, res) {
 
 		// Insert user into database
 		const sql =
-			"INSERT INTO Users (id, name, username, email , password, category) VALUES (?, ?, ?, ?, ?, ?)";
+			"INSERT INTO Users (name, username, email , password, category) VALUES (?, ?, ?, ?, ?)";
 		await db
 			.promise()
-			.query(sql, [uuidv4(), name, username, email, hashedPassword, "Admin"]);
+			.query(sql, [name, username, email, hashedPassword, "Admin"]);
 
 		res.status(201).json({ message: "Admin registered successfully" });
 	} catch (error) {
@@ -165,11 +164,10 @@ async function registerCounseller(req, res) {
 
 		// Insert user into database
 		const sql =
-			"INSERT INTO Users (id, name, username, phoneNumber, email, nic, password, category) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+			"INSERT INTO Users (name, username, phoneNumber, email, nic, password, category) VALUES (?, ?, ?, ?, ?, ?, ?)";
 		await db
 			.promise()
 			.query(sql, [
-				uuidv4(),
 				name,
 				username,
 				phoneNumber,
