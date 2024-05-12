@@ -2,9 +2,15 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Table, Button } from "flowbite-react";
 import axios from "../../axios";
+import { useNavigate } from "react-router-dom";
 
 function JobsBanner() {
+	const navigate = useNavigate();
 	const [jobs, setJobs] = useState([]);
+
+	const handleJobClick = (job) => {
+		navigate("/jobs/desc", { state: { job: job } });
+	};
 
 	useEffect(() => {
 		axios
@@ -38,7 +44,7 @@ function JobsBanner() {
 							{jobs.length > 0 &&
 								Object.keys(jobs[0]).map(
 									(key) =>
-										key !== "id" && (
+										!["id", "description"].includes(key) && (
 											<Table.HeadCell key={key}>{key}</Table.HeadCell>
 										)
 								)}
@@ -47,10 +53,14 @@ function JobsBanner() {
 							{jobs.map((job) => (
 								<Table.Row
 									key={job.id}
-									className="bg-white dark:border-gray-700 dark:bg-gray-800">
+									className="bg-white dark:border-gray-700 dark:bg-gray-800"
+									onClick={() => {
+										handleJobClick(job);
+									}}
+									style={{ cursor: "pointer" }}>
 									{Object.keys(job).map(
 										(key) =>
-											key !== "id" && (
+											!["id", "description"].includes(key) && (
 												<Table.Cell key={key}>{job[key]}</Table.Cell>
 											)
 									)}

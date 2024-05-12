@@ -42,9 +42,6 @@ function EventCalender() {
 						location={event.location}
 					/>
 				))}
-				{/* <EventCard />
-				<EventCard />
-				<EventCard /> */}
 			</div>
 		</div>
 	);

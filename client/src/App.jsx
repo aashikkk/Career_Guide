@@ -20,6 +20,9 @@ import PaymentSuccessPage from "./pages/PaymentSuccessPage";
 import PaymentCancelPage from "./pages/PaymentCancelPage";
 import EditableTableBlog from "./components/TableEditableBlog";
 import EditableTableJobs from "./components/TableEditableJobs";
+import CounsellerBookingPage from "./pages/CounsellerBookingPage";
+import JobDescriptionPage from "./pages/JobDescriptionPage";
+import BlogDescriptionPage from "./pages/BlogDescriptionPage";
 // import StripePaymentPage from "./pages/StripePaymentPage";
 
 const router = createBrowserRouter([
@@ -126,6 +129,18 @@ const router = createBrowserRouter([
 				element: <ViewableTable />,
 			},
 		],
+	},
+	{
+		path: "/pay",
+		element: <CounsellerBookingPage />,
+	},
+	{
+		path: "/jobs/desc",
+		element: <JobDescriptionPage />,
+	},
+	{
+		path: "/blogs/desc",
+		element: <BlogDescriptionPage />,
 	},
 ]);
 

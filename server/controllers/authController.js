@@ -143,8 +143,16 @@ async function registerAdmin(req, res) {
 }
 
 async function registerCounseller(req, res) {
-	const { name, username, phoneNumber, email, nic, password, category } =
-		req.body;
+	const {
+		name,
+		username,
+		phoneNumber,
+		email,
+		nic,
+		password,
+		category,
+		specialization,
+	} = req.body;
 
 	try {
 		// Check if user already exists
@@ -164,7 +172,7 @@ async function registerCounseller(req, res) {
 
 		// Insert user into database
 		const sql =
-			"INSERT INTO Users (name, username, phoneNumber, email, nic, password, category) VALUES (?, ?, ?, ?, ?, ?, ?)";
+			"INSERT INTO Users (name, username, phoneNumber, email, nic, password, category, specialization) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 		await db
 			.promise()
 			.query(sql, [
@@ -175,6 +183,7 @@ async function registerCounseller(req, res) {
 				nic,
 				hashedPassword,
 				"Counseller",
+				specialization,
 			]);
 
 		res.status(201).json({ message: "Counseller registered successfully" });
