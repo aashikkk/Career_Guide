@@ -29,6 +29,7 @@ CREATE TABLE IF NOT EXISTS Event (
     time TIME,
     resourcePerson VARCHAR(50),
     location VARCHAR(50)
+    details TEXT
 );
 
 

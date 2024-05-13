@@ -1,9 +1,15 @@
 import React, { useEffect, useState } from "react";
 import BlogCard from "../HomeScreenComponents/BlogCard";
 import axios from "../../axios";
+import { useNavigate } from "react-router-dom";
 
 function BlogComponent() {
+	const navigate = useNavigate();
 	const [blogs, setBlogs] = useState([]);
+
+	const handleBlogClick = (blog) => {
+		navigate("/blogs/desc", { state: { blog: blog } });
+	};
 
 	useEffect(() => {
 		axios
@@ -29,6 +35,10 @@ function BlogComponent() {
 				<div className="grid lg:grid-cols-3 gap-4 mt-7">
 					{blogs.map((blog) => (
 						<BlogCard
+							onClick={() => {
+								handleBlogClick(blog);
+							}}
+							style={{ cursor: "pointer" }}
 							key={blog.id}
 							title={blog.title}
 							description={blog.description}
@@ -36,6 +46,7 @@ function BlogComponent() {
 						/>
 					))}
 				</div>
+				8
 			</div>
 		</section>
 	);

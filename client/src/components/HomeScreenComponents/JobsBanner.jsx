@@ -50,7 +50,7 @@ function JobsBanner() {
 								)}
 						</Table.Head>
 						<Table.Body className="divide-y">
-							{jobs.map((job) => (
+							{jobs.slice(0, 5).map((job) => (
 								<Table.Row
 									key={job.id}
 									className="bg-white dark:border-gray-700 dark:bg-gray-800"

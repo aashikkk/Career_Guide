@@ -1,16 +1,16 @@
 import React from "react";
-import JobDescriptionCard from "../components/JobDescriptionCard";
 import NavBar from "../components/NavBar";
 import FooterBar from "../components/FooterBar";
+import EventDescriptionCard from "../components/EventDescriptionCard";
 
-function JobDescriptionPage() {
+function EventDescriptionPage() {
 	return (
 		<div>
 			<NavBar />
-			<JobDescriptionCard />
+			<EventDescriptionCard />
 			<FooterBar />
 		</div>
 	);
 }
 
-export default JobDescriptionPage;
+export default EventDescriptionPage;

@@ -5,7 +5,7 @@ import RegisterPage from "./pages/RegisterPage";
 import ContactUsPage from "./pages/ContactUsPage";
 import BlogsPage from "./pages/BlogsPage";
 import JobsPage from "./pages/JobsPage";
-import EventCalenderPage from "./pages/EventCalenderPage";
+import EventsPage from "./pages/EventsPage";
 import NotFoundPage from "./pages/NotFoundPage";
 import AdminDashboardPage from "./pages/AdminDashboardPage";
 import RegisterSuccessPage from "./pages/RegisterSuccessPage";
@@ -23,6 +23,7 @@ import EditableTableJobs from "./components/TableEditableJobs";
 import CounsellerBookingPage from "./pages/CounsellerBookingPage";
 import JobDescriptionPage from "./pages/JobDescriptionPage";
 import BlogDescriptionPage from "./pages/BlogDescriptionPage";
+import EventDescriptionPage from "./pages/EventDescriptionPage";
 // import StripePaymentPage from "./pages/StripePaymentPage";
 
 const router = createBrowserRouter([
@@ -56,7 +57,7 @@ const router = createBrowserRouter([
 			},
 			{
 				path: "events",
-				element: <EventCalenderPage />,
+				element: <EventsPage />,
 			},
 			{
 				path: "register/success",
@@ -137,6 +138,10 @@ const router = createBrowserRouter([
 	{
 		path: "/jobs/desc",
 		element: <JobDescriptionPage />,
+	},
+	{
+		path: "/events/desc",
+		element: <EventDescriptionPage />,
 	},
 	{
 		path: "/blogs/desc",
