@@ -5,13 +5,13 @@ const appointmentController = {
 		const { date, time, resourcePerson, attendeeUser } = req.body;
 
 		try {
-			await Appointment.createAppointment(
+			const newAppointment = await Appointment.create({
 				date,
 				time,
 				resourcePerson,
 				attendeeUser
-			);
-			res.status(201).json({ message: "Appointment created successfully" });
+			});
+			res.status(201).json({ message: "Appointment created successfully", appointment: newAppointment });
 		} catch (error) {
 			res.status(500).json({ error: error.message });
 		}
@@ -19,12 +19,22 @@ const appointmentController = {
 
 	updateAppointment: async (req, res) => {
 		const { id } = req.params;
-		const appointmentData = req.body;
+		const { date, time, resourcePerson, attendeeUser } = req.body;
+
 		try {
-			await Appointment.updateAppointmentById(id, appointmentData);
-			res.status(200).json({ message: "Appointment updated successfully" });
+			const appointment = await Appointment.findByPk(id);
+			if (!appointment) {
+				return res.status(404).json({ error: "Appointment not found" });
+			}
+
+			appointment.date = date;
+			appointment.time = time;
+			appointment.resourcePerson = resourcePerson;
+			appointment.attendeeUser = attendeeUser;
+
+			await appointment.save();
+			res.status(200).json({ message: "Appointment updated successfully", appointment });
 		} catch (error) {
-			res.status(404).json({ error: "Appointment not found" });
 			res.status(500).json({ error: error.message });
 		}
 	},
@@ -33,10 +43,14 @@ const appointmentController = {
 		const { id } = req.params;
 
 		try {
-			await Appointment.deleteAppointmentById(id);
+			const result = await Appointment.destroy({
+				where: { id }
+			});
+			if (result === 0) {
+				return res.status(404).json({ error: "Appointment not found" });
+			}
 			res.status(200).json({ message: "Appointment deleted successfully" });
 		} catch (error) {
-			res.status(404).json({ error: "Appointment not found" });
 			res.status(500).json({ error: error.message });
 		}
 	},
@@ -45,10 +59,12 @@ const appointmentController = {
 		const { id } = req.params;
 
 		try {
-			const appointment = await Appointment.getAppointmentById(id);
+			const appointment = await Appointment.findByPk(id);
+			if (!appointment) {
+				return res.status(404).json({ error: "Appointment not found" });
+			}
 			res.status(200).json(appointment);
 		} catch (error) {
-			res.status(404).json({ error: "Appointment not found" });
 			res.status(500).json({ error: error.message });
 		}
 	},
@@ -57,16 +73,13 @@ const appointmentController = {
 		const { attendeeUser } = req.params;
 
 		try {
-			const appointments = await Appointment.getAppointmentsByAttendee(
-				attendeeUser
-			);
+			const appointments = await Appointment.findAll({
+				where: { attendeeUser }
+			});
 			if (appointments.length === 0) {
-				res
-					.status(404)
-					.json({ error: "No appointments found for this attendee" });
-			} else {
-				res.status(200).json(appointments);
+				return res.status(404).json({ error: "No appointments found for this attendee" });
 			}
+			res.status(200).json(appointments);
 		} catch (error) {
 			res.status(500).json({ error: error.message });
 		}
@@ -74,7 +87,7 @@ const appointmentController = {
 
 	getAllAppointments: async (req, res) => {
 		try {
-			const appointments = await Appointment.getAllAppointments();
+			const appointments = await Appointment.findAll();
 			res.status(200).json(appointments);
 		} catch (error) {
 			res.status(500).json({ error: error.message });

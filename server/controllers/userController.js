@@ -1,102 +1,134 @@
-const userModel = require("../models/User");
+const User = require("../models/User");
 
 const userController = {
-	getAllUsers: async (req, res) => {
-		try {
-			const users = await userModel.getAllUsers();
-			res.status(200).json(users);
-		} catch (error) {
-			console.error("Error fetching users:", error);
-			res.status(500).json({ error: "Error fetching users" });
-		}
-	},
+    getAllUsers: async (req, res) => {
+        try {
+            const users = await User.findAll();
+            res.status(200).json(users);
+        } catch (error) {
+            console.error("Error fetching users:", error);
+            res.status(500).json({ error: "Error fetching users" });
+        }
+    },
 
-	getUserByUsername: async (req, res) => {
-		const { username } = req.params;
-		try {
-			const user = await userModel.getUserByUsername(username);
-			if (!user) {
-				return res.status(404).json({ error: "User not found" });
-			}
-			res.status(200).json(user);
-		} catch (error) {
-			console.error("Error fetching user:", error);
-			res.status(500).json({ error: "Error fetching user" });
-		}
-	},
+    getUserByUsername: async (req, res) => {
+        const { username } = req.params;
+        try {
+            const user = await User.findOne({ where: { username } });
+            if (!user) {
+                return res.status(404).json({ error: "User not found" });
+            }
+            res.status(200).json(user);
+        } catch (error) {
+            console.error("Error fetching user:", error);
+            res.status(500).json({ error: "Error fetching user" });
+        }
+    },
 
-	getUserByCategory: async (req, res) => {
-		const { category } = req.params;
-		try {
-			const users = await userModel.getUserByCategory(category);
-			res.status(200).json(users);
-		} catch (error) {
-			console.error("Error fetching users by category:", error);
-			res.status(500).json({ error: "Error fetching users by category" });
-		}
-	},
+    createCounseller: async (req, res) => {
+        const {
+            name,
+            username,
+            phoneNumber,
+            email,
+            nic,
+            password,
+            specialization,
+        } = req.body;
 
-	updateUserByIdOfCounseller: async (req, res) => {
-		const { id } = req.params;
-		const updatedFields = req.body;
+        try {
+            const newCounseller = await User.create({
+                name,
+                username,
+                phoneNumber,
+                email,
+                nic,
+                password,
+                specialization,
+                category: "Counseller",
+            });
+            res.status(201).json({
+                message: "Counseller registered successfully",
+            });
+        } catch (error) {
+            console.error("Error registering user:", error);
+            res.status(500).json({ error: "Internal server error" });
+        }
+    },
 
-		try {
-			const user = await userModel.getUserByIdOfCounseller(id);
-			if (!user) {
-				return res.status(404).json({ error: "User not found" });
-			}
+    getUserByCategory: async (req, res) => {
+        const { category } = req.params;
+        try {
+            const users = await User.findAll({ where: { category } });
+            res.status(200).json(users);
+        } catch (error) {
+            console.error("Error fetching users by category:", error);
+            res.status(500).json({ error: "Error fetching users by category" });
+        }
+    },
 
-			await userModel.updateUserByIdOfCounseller(id, updatedFields);
+    updateUserByIdOfCounseller: async (req, res) => {
+        const { id } = req.params;
+        const updatedFields = req.body;
 
-			res.status(200).json({ message: "User updated successfully" });
-		} catch (error) {
-			console.error("Error updating user:", error);
-			res.status(500).json({ error: "Internal server error" });
-		}
-	},
+        try {
+            const user = await User.findOne({
+                where: { id, category: "Counseller" },
+            });
+            if (!user) {
+                return res.status(404).json({ error: "User not found" });
+            }
 
-	deleteUserByIdOfCounseller: async (req, res) => {
-		const { category, id } = req.params;
+            await user.update(updatedFields);
+            res.status(200).json({ message: "User updated successfully" });
+        } catch (error) {
+            console.error("Error updating user:", error);
+            res.status(500).json({ error: "Internal server error" });
+        }
+    },
 
-		try {
-			// Check if the user exists
-			const user = await userModel.getUserByIdOfCounseller(id);
-			if (!user) {
-				return res.status(404).json({ error: "User not found" });
-			}
+    deleteUserByIdOfCounseller: async (req, res) => {
+        const { id } = req.params;
 
-			// Delete the user
-			await userModel.deleteUserByIdOfCounseller(id);
-			res.status(200).json({ message: "User deleted successfully" });
-		} catch (error) {
-			console.error("Error deleting user:", error);
-			res.status(500).json({ error: "Error deleting user" });
-		}
-	},
+        try {
+            const user = await User.findByPk(id);
+            if (!user) {
+                return res.status(404).json({ error: "User not found" });
+            }
 
-	updateUser: async (req, res) => {
-		const { username } = req.params;
-		const updatedFields = req.body;
+            await user.destroy();
+            res.status(200).json({ message: "User deleted successfully" });
+        } catch (error) {
+            console.error("Error deleting user:", error);
+            res.status(500).json({ error: "Error deleting user" });
+        }
+    },
 
-		try {
-			await userModel.updateUser(username, updatedFields);
-			res.status(200).json({ message: "User updated successfully" });
-		} catch (error) {
-			console.error("Error updating user:", error);
-			res.status(500).json({ error: "Error updating user" });
-		}
-	},
+    updateUser: async (req, res) => {
+        const { username } = req.params;
+        const updatedFields = req.body;
 
-	deleteUser: async (req, res) => {
-		const { username } = req.params;
-		try {
-			await userModel.deleteUser(username);
-			res.status(200).json({ message: "User deleted successfully" });
-		} catch (error) {
-			console.error("Error deleting user:", error);
-			res.status(500).json({ error: "Error deleting user" });
-		}
-	},
+        try {
+            const user = await User.findOne({ where: { username } });
+            await user.update(updatedFields);
+            res.status(200).json({ message: "User updated successfully" });
+        } catch (error) {
+            console.error("Error updating user:", error);
+            res.status(500).json({ error: "Error updating user" });
+        }
+    },
+
+    deleteUser: async (req, res) => {
+        const { username } = req.params;
+        try {
+            const user = await User.findOne({ where: { username } });
+            await user.destroy();
+            res.status(200).json({ message: "User deleted successfully" });
+        } catch (error) {
+            console.error("Error deleting user:", error);
+            res.status(500).json({ error: "Error deleting user" });
+        }
+    },
 };
 
 module.exports = userController;
