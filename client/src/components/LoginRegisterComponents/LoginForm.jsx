@@ -60,7 +60,10 @@ function LoginForm() {
 	return (
 		<section className="h-4/5">
 			<h2 className="mb-4 pt-8 text-4xl tracking-tight font-extrabold text-center text-gray-900 dark:text-white">
-				Login to your account
+				<span className="text-transparent bg-clip-text bg-gradient-to-r to-emerald-600 from-red-400">
+					Login
+				</span>{" "}
+				to your account
 			</h2>
 			<div className="container h-full px-6 py-12">
 				<div className="flex h-full flex-wrap items-center justify-center lg:justify-between">

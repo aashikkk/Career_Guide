@@ -1,11 +1,14 @@
 /* eslint-disable react/prop-types */
 import React from "react";
 
-function BlogCard({ title, description, coverPic }) {
+function BlogCard({ title, description, coverPic, onClick, style }) {
 	return (
 		<div>
 			<a
-				href="#"
+				// href="#"
+				onClick={onClick}
+				style={style}
+				// className="bg-white dark:border-gray-700 dark:bg-gray-800"
 				className="flex flex-col items-center bg-white border border-gray-200 rounded-lg shadow md:flex-row md:max-w-xl hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700">
 				<article className="p-6 bg-white rounded-lg border border-gray-200 shadow-md dark:bg-gray-800 dark:border-gray-700">
 					<h2 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
@@ -16,7 +19,7 @@ function BlogCard({ title, description, coverPic }) {
 					</p>
 					<div className="flex justify-between items-center">
 						<a
-							href="#"
+							href="desc"
 							className="inline-flex items-center font-medium text-primary-600 dark:text-primary-500 hover:underline">
 							Read more
 							<svg

@@ -3,9 +3,15 @@ import { Link } from "react-router-dom";
 import EventCard from "./EventCard";
 import { Button } from "flowbite-react";
 import axios from "../../axios";
+import { useNavigate } from "react-router-dom";
 
 function EventCalender() {
+	const navigate = useNavigate();
 	const [events, setEvents] = useState([]);
+
+	const handleEventClick = (event) => {
+		navigate("/events/desc", { state: { event: event } });
+	};
 
 	useEffect(() => {
 		axios
@@ -33,13 +39,17 @@ function EventCalender() {
 				</div>
 			</div>
 			<div className="grid lg:grid-cols-4 gap-4 py-20">
-				{events.map((event) => (
+				{events.slice(0, 4).map((event) => (
 					<EventCard
 						key={event.id}
 						date={event.date}
 						time={event.time}
 						title={event.title}
 						location={event.location}
+						onClick={() => {
+							handleEventClick(event);
+						}}
+						style={{ cursor: "pointer" }}
 					/>
 				))}
 			</div>

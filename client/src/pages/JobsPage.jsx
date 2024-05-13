@@ -25,6 +25,12 @@ function JobsPage() {
 	return (
 		<div>
 			<NavBar />
+			<h2 className="mb-4 text-3xl tracking-tight font-extrabold text-center text-gray-00 dark:text-white pb-7">
+				<mark className="px-2 text-white bg-blue-600 rounded dark:bg-blue-500">
+					Jobs
+				</mark>{" "}
+				to Pursue your career
+			</h2>
 			<div className="overflow-x-auto w-10/12  mx-auto mt-7">
 				<Table hoverable>
 					<Table.Head>

@@ -3,9 +3,12 @@
 import React from "react";
 import { Card } from "flowbite-react";
 
-function EventCard({ date, time, title, location }) {
+function EventCard({ date, time, title, location, onClick, style }) {
 	return (
-		<div>
+		<div
+			className="bg-white dark:border-gray-700 dark:bg-gray-800"
+			onClick={onClick}
+			style={style}>
 			<Card className="max-w-sm">
 				<div>
 					{date}, {time}
