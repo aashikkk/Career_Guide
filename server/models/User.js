@@ -4,34 +4,34 @@ const db = require("../db");
 class User extends Model {}
 
 User.init(
-    {
-        id: {
-            type: DataTypes.INTEGER,
-            primaryKey: true,
-            autoIncrement: true,
-        },
-        username: {
-            type: DataTypes.STRING,
-            allowNull: false,
-            unique: true,
-        },
-        category: {
-            type: DataTypes.ENUM,
-            values: [
-                "SchoolStudent",
-                "Undergraduate",
-                "Graduate",
-                "Admin",
-                "Counseller",
-            ],
-            allowNull: false,
-        },
-    },
-    {
-        tableName: "Users",
-        modelName: "User",
-        timestamps: false,
-    }
+	{
+		id: {
+			type: DataTypes.INTEGER,
+			primaryKey: true,
+			autoIncrement: true,
+		},
+		username: {
+			type: DataTypes.STRING,
+			allowNull: false,
+			unique: true,
+		},
+		category: {
+			type: DataTypes.ENUM,
+			values: [
+				"SchoolStudent",
+				"Undergraduate",
+				"Graduate",
+				"Admin",
+				"Counseller",
+			],
+			allowNull: false,
+		},
+	},
+	{
+		tableName: "Users",
+		modelName: "User",
+		timestamps: false,
+	}
 );
 
 // const user = {
