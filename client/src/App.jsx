@@ -150,31 +150,31 @@ const router = createBrowserRouter([
 ]);
 
 function App() {
-	const [loggedIn, setLoggedIn] = useState(false);
+	// const [loggedIn, setLoggedIn] = useState(false);
 
-	const authenticate = async () => {
-		try {
-			const token = localStorage.getItem("token");
-			console.log(token);
-			if (token) {
-				setLoggedIn(true);
-			} else {
-				setLoggedIn(false);
-			}
-		} catch (err) {
-			console.log(err);
-			setLoggedIn(false);
-		}
-	};
+	// const authenticate = async () => {
+	// 	try {
+	// 		const token = localStorage.getItem("token");
+	// 		console.log(token);
+	// 		if (token) {
+	// 			setLoggedIn(true);
+	// 		} else {
+	// 			setLoggedIn(false);
+	// 		}
+	// 	} catch (err) {
+	// 		console.log(err);
+	// 		setLoggedIn(false);
+	// 	}
+	// };
 
-	useEffect(() => {
-		authenticate();
-	}, []);
+	// useEffect(() => {
+	// 	authenticate();
+	// }, []);
 
-	const handleLogout = () => {
-		localStorage.removeItem("token");
-		setLoggedIn(false);
-	};
+	// const handleLogout = () => {
+	// 	localStorage.removeItem("token");
+	// 	setLoggedIn(false);
+	// };
 
 	return <RouterProvider router={router} />;
 }
