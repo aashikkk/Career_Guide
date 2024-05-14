@@ -9,9 +9,12 @@ const appointmentController = {
 				date,
 				time,
 				resourcePerson,
-				attendeeUser
+				attendeeUser,
 			});
-			res.status(201).json({ message: "Appointment created successfully", appointment: newAppointment });
+			res.status(201).json({
+				message: "Appointment created successfully",
+				appointment: newAppointment,
+			});
 		} catch (error) {
 			res.status(500).json({ error: error.message });
 		}
@@ -19,7 +22,7 @@ const appointmentController = {
 
 	updateAppointment: async (req, res) => {
 		const { id } = req.params;
-		const { date, time, resourcePerson, attendeeUser } = req.body;
+		const appointmentData = req.body;
 
 		try {
 			const appointment = await Appointment.findByPk(id);
@@ -27,14 +30,14 @@ const appointmentController = {
 				return res.status(404).json({ error: "Appointment not found" });
 			}
 
-			appointment.date = date;
-			appointment.time = time;
-			appointment.resourcePerson = resourcePerson;
-			appointment.attendeeUser = attendeeUser;
-
-			await appointment.save();
-			res.status(200).json({ message: "Appointment updated successfully", appointment });
+			const updatedAppointment = await appointment.update(appointmentData);
+			res.status(200).json({
+				message: "Appointment updated successfully",
+				appointment: updatedAppointment,
+			});
 		} catch (error) {
+			console.error("Error updating appointment:", error);
+
 			res.status(500).json({ error: error.message });
 		}
 	},
@@ -44,7 +47,7 @@ const appointmentController = {
 
 		try {
 			const result = await Appointment.destroy({
-				where: { id }
+				where: { id },
 			});
 			if (result === 0) {
 				return res.status(404).json({ error: "Appointment not found" });
@@ -74,10 +77,12 @@ const appointmentController = {
 
 		try {
 			const appointments = await Appointment.findAll({
-				where: { attendeeUser }
+				where: { attendeeUser },
 			});
 			if (appointments.length === 0) {
-				return res.status(404).json({ error: "No appointments found for this attendee" });
+				return res
+					.status(404)
+					.json({ error: "No appointments found for this attendee" });
 			}
 			res.status(200).json(appointments);
 		} catch (error) {
