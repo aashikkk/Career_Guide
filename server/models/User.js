@@ -26,6 +26,58 @@ User.init(
 			],
 			allowNull: false,
 		},
+		name: {
+			type: DataTypes.STRING,
+			allowNull: false,
+		},
+		phoneNumber: {
+			type: DataTypes.STRING,
+			allowNull: true,
+		},
+		email: {
+			type: DataTypes.STRING,
+			allowNull: false,
+		},
+		password: {
+			type: DataTypes.STRING,
+			allowNull: false,
+		},
+		highestQualifications: {
+			type: DataTypes.STRING,
+			allowNull: true,
+		},
+		nic: {
+			type: DataTypes.STRING,
+			allowNull: true,
+		},
+		age: {
+			type: DataTypes.INTEGER,
+			allowNull: true,
+		},
+		grade: {
+			type: DataTypes.STRING,
+			allowNull: true,
+		},
+		currentYear: {
+			type: DataTypes.STRING,
+			allowNull: true,
+		},
+		educationLevel: {
+			type: DataTypes.STRING,
+			allowNull: true,
+		},
+		majorField: {
+			type: DataTypes.STRING,
+			allowNull: true,
+		},
+		GraduateYear: {
+			type: DataTypes.STRING,
+			allowNull: true,
+		},
+		specialization: {
+			type: DataTypes.STRING,
+			allowNull: true,
+		},
 	},
 	{
 		sequelize,
@@ -34,75 +86,5 @@ User.init(
 		timestamps: false,
 	}
 );
-
-// const user = {
-//     getAllUsers: async () => {
-//         try {
-//             return await User.findAll();
-//         } catch (error) {
-//             throw error;
-//         }
-//     },
-
-//     getUserByUsername: async (username) => {
-//         try {
-//             return await User.findOne({ where: { username } });
-//         } catch (error) {
-//             throw error;
-//         }
-//     },
-
-//     getUserByCategory: async (category) => {
-//         try {
-//             return await User.findAll({ where: { category } });
-//         } catch (error) {
-//             throw error;
-//         }
-//     },
-
-//     getUserByIdOfCounseller: async (id) => {
-//         try {
-//             return await User.findOne({
-//                 where: { id, category: "Counseller" },
-//             });
-//         } catch (error) {
-//             throw error;
-//         }
-//     },
-
-//     updateUserByIdOfCounseller: async (id, updatedFields) => {
-//         try {
-//             await User.update(updatedFields, {
-//                 where: { id, category: "Counseller" },
-//             });
-//         } catch (error) {
-//             throw error;
-//         }
-//     },
-
-//     deleteUserByIdOfCounseller: async (id) => {
-//         try {
-//             await User.destroy({ where: { id, category: "Counseller" } });
-//         } catch (error) {
-//             throw error;
-//         }
-//     },
-
-//     updateUser: async (username, updatedFields) => {
-//         try {
-//             await User.update(updatedFields, { where: { username } });
-//         } catch (error) {
-//             throw error;
-//         }
-//     },
-
-//     deleteUser: async (username) => {
-//         try {
-//             await User.destroy({ where: { username } });
-//         } catch (error) {
-//             throw error;
-//         }
-//     },
-// };
 
 module.exports = User;

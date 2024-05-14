@@ -8,9 +8,15 @@ router.get("/:username", userController.getUserByUsername);
 router.get("/category/:category", userController.getUserByCategory);
 router.put("/:username", userController.updateUser);
 router.delete("/:username", userController.deleteUser);
-router.put("category/:category/:id", userController.updateUserByIdOfCounseller);
+router.put("/:id", userController.updateUserById);
+router.delete("/:id", userController.deleteUserById);
+router.post("/", userController.createCounseller);
+router.put(
+	"/category/:category/:id",
+	userController.updateUserByIdOfCounseller
+);
 router.delete(
-	"category/:category/:id",
+	"/category/:category/:id",
 	userController.deleteUserByIdOfCounseller
 );
 
