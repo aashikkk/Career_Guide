@@ -31,6 +31,13 @@ function EditableTableAppointment() {
 
 	return (
 		<div className="overflow-x-auto py-12 mx-auto w-11/12">
+			<div className="flex justify-end pb-3">
+				<button
+					// onClick={() => (window.location.href = `event/${event.id}`)} // Navigate to your create route
+					className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+					Create
+				</button>
+			</div>
 			<Table striped>
 				<Table.Head>
 					{appointments.length > 0 &&
@@ -38,9 +45,6 @@ function EditableTableAppointment() {
 							(key) =>
 								key !== "id" && <Table.HeadCell key={key}>{key}</Table.HeadCell>
 						)}
-					<Table.HeadCell>
-						<span className="sr-only">Create</span>
-					</Table.HeadCell>
 					<Table.HeadCell>
 						<span className="sr-only">Edit</span>
 					</Table.HeadCell>
@@ -59,13 +63,7 @@ function EditableTableAppointment() {
 										<Table.Cell key={key}>{appointment[key]}</Table.Cell>
 									)
 							)}
-							<Table.Cell>
-								<a
-									href={`event/${appointment.id}`} // Replace with your edit route
-									className="font-medium text-blue-400 hover:underline dark:text-blue-500">
-									Create
-								</a>
-							</Table.Cell>
+
 							<Table.Cell>
 								<a
 									href={`appointment/${appointment.id}`} // Replace with your edit route

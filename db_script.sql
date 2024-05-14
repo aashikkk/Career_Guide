@@ -17,8 +17,8 @@ CREATE TABLE IF NOT EXISTS Appointment (
 CREATE TABLE IF NOT EXISTS Blog (
     id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     title VARCHAR(200),
-    coverPic MEDIUMBLOB DEFAULT NULL,
-    description TEXT
+    description TEXT,
+    -- coverPic MEDIUMBLOB DEFAULT NULL,
 );
 
 -- Create the Event table
@@ -26,7 +26,7 @@ CREATE TABLE IF NOT EXISTS Event (
     id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,,
     title VARCHAR(255) NOT NULL,
     date DATE,
-    time TIME,
+    time TIME,  
     resourcePerson VARCHAR(50),
     location VARCHAR(50)
     details TEXT
@@ -40,7 +40,8 @@ CREATE TABLE IF NOT EXISTS Job (
     jobTitle VARCHAR(50) NOT NULL,
     type VARCHAR(60),
     company VARCHAR(50),
-    location VARCHAR(50)
+    location VARCHAR(50),
+    description TEXT
 );
 
 

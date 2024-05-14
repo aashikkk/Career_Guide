@@ -18,7 +18,7 @@ function EditableTableJobs() {
 
 	const handleDelete = (jobId) => {
 		axios
-			.delete(`/event/${jobId}`)
+			.delete(`/job/${jobId}`)
 			.then((response) => {
 				setJobs(jobs.filter((job) => job.id !== jobId));
 			})
@@ -29,6 +29,13 @@ function EditableTableJobs() {
 
 	return (
 		<div className="overflow-x-auto py-12 mx-auto w-11/12">
+			<div className="flex justify-end pb-3">
+				<button
+					onClick={() => (window.location.href = `job`)} // Navigate to your create route
+					className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+					Create
+				</button>
+			</div>
 			<Table striped>
 				<Table.Head>
 					{jobs.length > 0 &&
@@ -36,9 +43,6 @@ function EditableTableJobs() {
 							(key) =>
 								key !== "id" && <Table.HeadCell key={key}>{key}</Table.HeadCell>
 						)}
-					<Table.HeadCell>
-						<span className="sr-only">Create</span>
-					</Table.HeadCell>
 					<Table.HeadCell>
 						<span className="sr-only">Edit</span>
 					</Table.HeadCell>
@@ -55,13 +59,6 @@ function EditableTableJobs() {
 								(key) =>
 									key !== "id" && <Table.Cell key={key}>{job[key]}</Table.Cell>
 							)}
-							<Table.Cell>
-								<a
-									href={`event/${job.id}`} // Replace with your edit route
-									className="font-medium text-blue-400 hover:underline dark:text-blue-500">
-									Create
-								</a>
-							</Table.Cell>
 							<Table.Cell>
 								<a
 									href={`event/${job.id}`} // Replace with your edit route

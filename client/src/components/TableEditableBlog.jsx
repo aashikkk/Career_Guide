@@ -29,6 +29,13 @@ function EditableTableBlog() {
 
 	return (
 		<div className="overflow-x-auto  py-12 mx-auto w-11/12">
+			<div className="flex justify-end pb-3">
+				<button
+					// onClick={() => (window.location.href = `event/${event.id}`)} // Navigate to your create route
+					className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+					Create
+				</button>
+			</div>
 			<Table striped>
 				<Table.Head>
 					{blogs.length > 0 &&
@@ -36,9 +43,7 @@ function EditableTableBlog() {
 							(key) =>
 								key !== "id" && <Table.HeadCell key={key}>{key}</Table.HeadCell>
 						)}
-					<Table.HeadCell>
-						<span className="sr-only">Create</span>
-					</Table.HeadCell>
+
 					<Table.HeadCell>
 						<span className="sr-only">Edit</span>
 					</Table.HeadCell>
@@ -51,17 +56,17 @@ function EditableTableBlog() {
 						<Table.Row
 							key={blog.id}
 							className="bg-white dark:border-gray-700 dark:bg-gray-800">
-							{Object.keys(blog).map(
-								(key) =>
-									key !== "id" && <Table.Cell key={key}>{blog[key]}</Table.Cell>
-							)}
-							<Table.Cell>
-								<a
-									href={`event/${blog.id}`} // Replace with your edit route
-									className="font-medium text-blue-400 hover:underline dark:text-blue-500">
-									Create
-								</a>
-							</Table.Cell>
+							{Object.keys(blog).map((key) => {
+								if (key !== "id") {
+									const value = blog[key];
+									// Check if the value is an object and convert it to a string or handle it appropriately
+									const displayValue =
+										typeof value === "object" ? JSON.stringify(value) : value;
+									return <Table.Cell key={key}>{displayValue}</Table.Cell>;
+								}
+								return null;
+							})}
+
 							<Table.Cell>
 								<a
 									href={`event/${blog.id}`} // Replace with your edit route
