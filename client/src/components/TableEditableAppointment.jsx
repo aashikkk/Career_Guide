@@ -31,59 +31,62 @@ function EditableTableAppointment() {
 
 	return (
 		<div className="overflow-x-auto py-12 mx-auto w-11/12">
-			<Table striped>
-				<Table.Head>
-					{appointments.length > 0 &&
-						Object.keys(appointments[0]).map(
+			<div className="flex justify-end pb-3">
+				<button
+					className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
+					onClick={() => (window.location.href = `/admin/appointment/create`)} // Navigate to your create route
+				>
+					Create
+				</button>
+			</div>
+			{appointments.length > 0 ? (
+				<Table striped>
+					<Table.Head>
+						{Object.keys(appointments[0]).map(
 							(key) =>
 								key !== "id" && <Table.HeadCell key={key}>{key}</Table.HeadCell>
 						)}
-					<Table.HeadCell>
-						<span className="sr-only">Create</span>
-					</Table.HeadCell>
-					<Table.HeadCell>
-						<span className="sr-only">Edit</span>
-					</Table.HeadCell>
-					<Table.HeadCell>
-						<span className="sr-only">Delete</span>
-					</Table.HeadCell>
-				</Table.Head>
-				<Table.Body className="divide-y">
-					{appointments.map((appointment) => (
-						<Table.Row
-							key={appointment.id}
-							className="bg-white dark:border-gray-700 dark:bg-gray-800">
-							{Object.keys(appointment).map(
-								(key) =>
-									key !== "id" && (
-										<Table.Cell key={key}>{appointment[key]}</Table.Cell>
-									)
-							)}
-							<Table.Cell>
-								<a
-									href={`event/${appointment.id}`} // Replace with your edit route
-									className="font-medium text-blue-400 hover:underline dark:text-blue-500">
-									Create
-								</a>
-							</Table.Cell>
-							<Table.Cell>
-								<a
-									href={`appointment/${appointment.id}`} // Replace with your edit route
-									className="font-medium text-cyan-600 hover:underline dark:text-cyan-500">
-									Edit
-								</a>
-							</Table.Cell>
-							<Table.Cell>
-								<button
-									onClick={() => handleDelete(appointment.id)}
-									className="font-medium text-red-600 hover:underline dark:text-red-500">
-									Delete
-								</button>
-							</Table.Cell>
-						</Table.Row>
-					))}
-				</Table.Body>
-			</Table>
+						<Table.HeadCell>
+							<span className="sr-only">Edit</span>
+						</Table.HeadCell>
+						<Table.HeadCell>
+							<span className="sr-only">Delete</span>
+						</Table.HeadCell>
+					</Table.Head>
+					<Table.Body className="divide-y">
+						{appointments.map((appointment) => (
+							<Table.Row
+								key={appointment.id}
+								className="bg-white dark:border-gray-700 dark:bg-gray-800">
+								{Object.keys(appointment).map(
+									(key) =>
+										key !== "id" && (
+											<Table.Cell key={key}>{appointment[key]}</Table.Cell>
+										)
+								)}
+								<Table.Cell>
+									<a
+										href={`appointment/update/${appointment.id}`}
+										className="font-medium text-cyan-600 hover:underline dark:text-cyan-500">
+										Edit
+									</a>
+								</Table.Cell>
+								<Table.Cell>
+									<button
+										onClick={() => handleDelete(appointment.id)}
+										className="font-medium text-red-600 hover:underline dark:text-red-500">
+										Delete
+									</button>
+								</Table.Cell>
+							</Table.Row>
+						))}
+					</Table.Body>
+				</Table>
+			) : (
+				<div className="text-center py-8">
+					<span className="text-gray-500">No records found.</span>
+				</div>
+			)}
 		</div>
 	);
 }

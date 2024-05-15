@@ -1,7 +1,7 @@
 const bcrypt = require("bcrypt");
-const db = require("../db");
-const { v4: uuidv4 } = require("uuid");
+const User = require("../models/User");
 const jwt = require("jsonwebtoken");
+const { Op } = require("sequelize");
 
 const saltRounds = 10;
 
@@ -15,14 +15,12 @@ async function registerUser(req, res) {
 
 	try {
 		// Check if user already exists
-		const [existingUser] = await db
-			.promise()
-			.query("SELECT * FROM Users WHERE username = ? OR email = ? OR nic = ?", [
-				username,
-				email,
-				nic,
-			]);
-		if (existingUser.length > 0) {
+		const existingUser = await User.findOne({
+			where: {
+				[Op.or]: [{ username }, { email }, { nic }],
+			},
+		});
+		if (existingUser) {
 			return res.status(400).json({ error: "User already exists" });
 		}
 
@@ -30,19 +28,15 @@ async function registerUser(req, res) {
 		const hashedPassword = await bcrypt.hash(password, saltRounds);
 
 		// Insert user into database
-		const sql =
-			"INSERT INTO Users (name, username, phoneNumber, email, nic, password, category) VALUES (?, ?, ?, ?, ?, ?, ?)";
-		await db
-			.promise()
-			.query(sql, [
-				name,
-				username,
-				phoneNumber,
-				email,
-				nic,
-				hashedPassword,
-				category,
-			]);
+		const newUser = await User.create({
+			name,
+			username,
+			phoneNumber,
+			email,
+			nic,
+			password: hashedPassword,
+			category,
+		});
 
 		res.status(201).json({ message: "User registered successfully" });
 	} catch (error) {
@@ -56,9 +50,9 @@ async function loginUser(req, res) {
 
 	try {
 		// Fetch user from database
-		const [user] = await db
-			.promise()
-			.query("SELECT * FROM Users WHERE username = ?", [username]);
+		const user = await User.findOne({
+			where: { username },
+		});
 
 		if (!username || !password) {
 			return res
@@ -66,21 +60,22 @@ async function loginUser(req, res) {
 				.json({ message: "Username and Password are Required" });
 		}
 
-		if (user.length === 0) {
+		if (!user) {
 			return res.status(401).json({ error: "Invalid username or password" });
 		}
 
 		// Check password
-		const passwordMatch = await bcrypt.compare(password, user[0].password);
+		const passwordMatch = await bcrypt.compare(password, user.password);
 		if (!passwordMatch) {
 			return res.status(401).json({ error: "Invalid password" });
 		} else {
-			// User authenticated successfully, get user category
-			const { category } = user[0];
-
 			// User authenticated successfully, generate JWT token
-			const token = generateAccessToken(user[0].id);
-			res.status(200).json({ message: "Login successful", token, category });
+			const token = generateAccessToken(user.id);
+			res.status(200).json({
+				message: "Login successful",
+				token,
+				category: user.category,
+			});
 		}
 	} catch (error) {
 		console.error("Error logging in:", error);
@@ -101,7 +96,7 @@ async function authenticate(req, res, next) {
 	console.log("Actual Token: " + extractedToken);
 
 	try {
-		// /verift and validate our token
+		// Verify and validate our token
 		const decoded = jwt.verify(extractedToken, process.env.JWT_SECRET);
 		req.userId = decoded.userId;
 		next();
@@ -115,13 +110,12 @@ async function registerAdmin(req, res) {
 
 	try {
 		// Check if user already exists
-		const [existingUser] = await db
-			.promise()
-			.query("SELECT * FROM Users WHERE username = ? OR email = ? ", [
-				username,
-				email,
-			]);
-		if (existingUser.length > 0) {
+		const existingUser = await User.findOne({
+			where: {
+				[Op.or]: [{ username }, { email }],
+			},
+		});
+		if (existingUser) {
 			return res.status(400).json({ error: "User already exists" });
 		}
 
@@ -129,11 +123,13 @@ async function registerAdmin(req, res) {
 		const hashedPassword = await bcrypt.hash(password, saltRounds);
 
 		// Insert user into database
-		const sql =
-			"INSERT INTO Users (name, username, email , password, category) VALUES (?, ?, ?, ?, ?)";
-		await db
-			.promise()
-			.query(sql, [name, username, email, hashedPassword, "Admin"]);
+		const newAdmin = await User.create({
+			name,
+			username,
+			email,
+			password: hashedPassword,
+			category: "Admin",
+		});
 
 		res.status(201).json({ message: "Admin registered successfully" });
 	} catch (error) {
@@ -156,14 +152,12 @@ async function registerCounseller(req, res) {
 
 	try {
 		// Check if user already exists
-		const [existingUser] = await db
-			.promise()
-			.query("SELECT * FROM Users WHERE username = ? OR email = ? OR nic = ?", [
-				username,
-				email,
-				nic,
-			]);
-		if (existingUser.length > 0) {
+		const existingUser = await User.findOne({
+			where: {
+				[Op.or]: [{ username }, { email }, { nic }],
+			},
+		});
+		if (existingUser) {
 			return res.status(400).json({ error: "User already exists" });
 		}
 
@@ -171,20 +165,16 @@ async function registerCounseller(req, res) {
 		const hashedPassword = await bcrypt.hash(password, saltRounds);
 
 		// Insert user into database
-		const sql =
-			"INSERT INTO Users (name, username, phoneNumber, email, nic, password, category, specialization) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-		await db
-			.promise()
-			.query(sql, [
-				name,
-				username,
-				phoneNumber,
-				email,
-				nic,
-				hashedPassword,
-				"Counseller",
-				specialization,
-			]);
+		const newCounseller = await User.create({
+			name,
+			username,
+			phoneNumber,
+			email,
+			nic,
+			password: hashedPassword,
+			category: "Counseller",
+			specialization,
+		});
 
 		res.status(201).json({ message: "Counseller registered successfully" });
 	} catch (error) {

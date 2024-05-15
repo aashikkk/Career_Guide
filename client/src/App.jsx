@@ -24,6 +24,11 @@ import CounsellerBookingPage from "./pages/CounsellerBookingPage";
 import JobDescriptionPage from "./pages/JobDescriptionPage";
 import BlogDescriptionPage from "./pages/BlogDescriptionPage";
 import EventDescriptionPage from "./pages/EventDescriptionPage";
+import Appointment from "./components/CreateUpdateForms/Appointment";
+import Events from "./components/CreateUpdateForms/Events";
+import Counseller from "./components/CreateUpdateForms/Counseller";
+import Blog from "./components/CreateUpdateForms/Blog";
+import Job from "./components/CreateUpdateForms/Job";
 // import StripePaymentPage from "./pages/StripePaymentPage";
 
 const router = createBrowserRouter([
@@ -147,34 +152,99 @@ const router = createBrowserRouter([
 		path: "/blogs/desc",
 		element: <BlogDescriptionPage />,
 	},
+	{
+		path: "/admin/appointment",
+		children: [
+			{
+				path: "create",
+				element: <Appointment func={"Create"} />,
+			},
+			{
+				path: "update/:id",
+				element: <Appointment func={"Update"} />,
+			},
+		],
+	},
+	{
+		path: "/admin/event",
+		children: [
+			{
+				path: "create",
+				element: <Events func={"Create"} />,
+			},
+			{
+				path: "update/:id",
+				element: <Events func={"Update"} />,
+			},
+		],
+	},
+	{
+		path: "/admin/counseller",
+		children: [
+			{
+				path: "create",
+				element: <Counseller func={"Create"} />,
+			},
+			{
+				path: "update/:id",
+				element: <Counseller func={"Update"} />,
+			},
+		],
+	},
+	{
+		path: "/admin/blog",
+		children: [
+			{
+				path: "create",
+				element: <Blog func={"Create"} />,
+			},
+			{
+				path: "update/:id",
+				element: <Blog func={"Update"} />,
+			},
+		],
+	},
+	{
+		path: "/admin/job",
+		children: [
+			{
+				path: "create",
+				element: <Job func={"Create"} />,
+			},
+			{
+				path: "update/:id",
+				element: <Job func={"Update"} />,
+			},
+		],
+	},
 ]);
 
 function App() {
-	const [loggedIn, setLoggedIn] = useState(false);
+	// const [loggedIn, setLoggedIn] = useState(false);
 
-	const authenticate = async () => {
-		try {
-			const token = localStorage.getItem("token");
-			console.log(token);
-			if (token) {
-				setLoggedIn(true);
-			} else {
-				setLoggedIn(false);
-			}
-		} catch (err) {
-			console.log(err);
-			setLoggedIn(false);
-		}
-	};
+	// const authenticate = async () => {
+	// 	try {
+	// 		const token = localStorage.getItem("token");
+	// 		console.log(token);
+	// 		if (token) {
+	// 			setLoggedIn(true);
+	// 		} else {
+	// 			setLoggedIn(false);
+	// 		}
+	// 	} catch (err) {
+	// 		console.log(err);
+	// 		setLoggedIn(false);
+	// 	}
+	// };
 
-	useEffect(() => {
-		authenticate();
-	}, []);
+	// useEffect(() => {
+	// 	authenticate();
+	// }, []);
 
-	const handleLogout = () => {
-		localStorage.removeItem("token");
-		setLoggedIn(false);
-	};
+	// const handleLogout = () => {
+	// 	localStorage.removeItem("token");
+	// 	setLoggedIn(false);
+	// };
 
 	return <RouterProvider router={router} />;
 }

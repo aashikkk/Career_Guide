@@ -123,7 +123,7 @@ function CounsellerBanner() {
 				</div>
 			</div>
 			<div className="grid lg:grid-cols-4 gap-4 md:grid-cols-3 mt-7">
-				{counseller.map((counseller) => (
+				{counseller.slice(0, 8).map((counseller) => (
 					<CounsellerCard
 						key={counseller.id}
 						name={counseller.name}

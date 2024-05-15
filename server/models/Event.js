@@ -1,63 +1,46 @@
-const db = require("../db");
+const { DataTypes, Model } = require("sequelize");
+const sequelize = require("../db");
 
-const event = {
-	getAllEvents: async () => {
-		try {
-			const [events] = await db.promise().query("SELECT * FROM Event");
-			return events;
-		} catch (error) {
-			throw error;
-		}
+class Event extends Model {}
+
+Event.init(
+	{
+		id: {
+			type: DataTypes.INTEGER,
+			primaryKey: true,
+			autoIncrement: true,
+		},
+		title: {
+			type: DataTypes.STRING,
+			allowNull: false,
+		},
+		date: {
+			type: DataTypes.DATEONLY,
+			allowNull: false,
+		},
+		time: {
+			type: DataTypes.TIME,
+			allowNull: false,
+		},
+		resourcePerson: {
+			type: DataTypes.STRING,
+			allowNull: true,
+		},
+		location: {
+			type: DataTypes.STRING,
+			allowNull: false,
+		},
+		details: {
+			type: DataTypes.TEXT,
+			allowNull: false,
+		},
 	},
+	{
+		sequelize,
+		modelName: "Event",
+		tableName: "Event",
+		timestamps: false,
+	}
+);
 
-	createEvent: async (title, date, time, resourcePerson, location) => {
-		try {
-			// Insert event into database
-			const sql =
-				"INSERT INTO Event (title, date, time, resourcePerson, location) VALUES (?, ?, ?, ?, ?)";
-			await db
-				.promise()
-				.query(sql, [title, date, time, resourcePerson, location]);
-
-			return { message: "Event created successfully" };
-		} catch (error) {
-			throw error;
-		}
-	},
-
-	getEventById: async (eventId) => {
-		try {
-			const [event] = await db
-				.promise()
-				.query("SELECT * FROM Event WHERE id = ?", [eventId]);
-			return event[0]; // Assuming event ID is unique
-		} catch (error) {
-			throw error;
-		}
-	},
-
-	updateEventById: async (eventId, updatedFields) => {
-		try {
-			const updateQuery =
-				"UPDATE Event SET " +
-				Object.keys(updatedFields)
-					.map((key) => `${key} = ?`)
-					.join(", ") +
-				" WHERE id = ?";
-			const updateValues = [...Object.values(updatedFields), eventId];
-			await db.promise().query(updateQuery, updateValues);
-		} catch (error) {
-			throw error;
-		}
-	},
-
-	deleteEventById: async (eventId) => {
-		try {
-			await db.promise().query("DELETE FROM Event WHERE id = ?", [eventId]);
-		} catch (error) {
-			throw error;
-		}
-	},
-};
-
-module.exports = event;
+module.exports = Event;
