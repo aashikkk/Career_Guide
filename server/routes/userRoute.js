@@ -4,12 +4,13 @@ const userController = require("../controllers/userController");
 const authenticate = require("../controllers/authController");
 
 router.get("/", userController.getAllUsers);
-router.get("/:username", userController.getUserByUsername);
+router.get("/by-uname/:username", userController.getUserByUsername);
+router.get("/by-id/:id", userController.getUserById);
 router.get("/category/:category", userController.getUserByCategory);
 router.put("/:username", userController.updateUser);
 router.delete("/:username", userController.deleteUser);
-router.put("/:id", userController.updateUserById);
-router.delete("/:id", userController.deleteUserById);
+router.put("/by-id/:id", userController.updateUserById);
+router.delete("/by-id/:id", userController.deleteUserById);
 router.post("/", userController.createCounseller);
 router.put(
 	"/category/:category/:id",

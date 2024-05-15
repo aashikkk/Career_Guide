@@ -32,7 +32,7 @@ Event.init(
 		},
 		details: {
 			type: DataTypes.TEXT,
-			allowNull: true,
+			allowNull: false,
 		},
 	},
 	{

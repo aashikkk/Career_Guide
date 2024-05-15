@@ -24,6 +24,9 @@ import CounsellerBookingPage from "./pages/CounsellerBookingPage";
 import JobDescriptionPage from "./pages/JobDescriptionPage";
 import BlogDescriptionPage from "./pages/BlogDescriptionPage";
 import EventDescriptionPage from "./pages/EventDescriptionPage";
+import Appointment from "./components/CreateUpdateForms/Appointment";
+import Events from "./components/CreateUpdateForms/Events";
+import Counseller from "./components/CreateUpdateForms/Counseller";
 // import StripePaymentPage from "./pages/StripePaymentPage";
 
 const router = createBrowserRouter([
@@ -146,6 +149,45 @@ const router = createBrowserRouter([
 	{
 		path: "/blogs/desc",
 		element: <BlogDescriptionPage />,
+	},
+	{
+		path: "/admin/appointment",
+		children: [
+			{
+				path: "create",
+				element: <Appointment func={"Create"} />,
+			},
+			{
+				path: "update/:id",
+				element: <Appointment func={"Update"} />,
+			},
+		],
+	},
+	{
+		path: "/admin/event",
+		children: [
+			{
+				path: "create",
+				element: <Events func={"Create"} />,
+			},
+			{
+				path: "update/:id",
+				element: <Events func={"Update"} />,
+			},
+		],
+	},
+	{
+		path: "/admin/counseller",
+		children: [
+			{
+				path: "create",
+				element: <Counseller func={"Create"} />,
+			},
+			{
+				path: "update/:id",
+				element: <Counseller func={"Update"} />,
+			},
+		],
 	},
 ]);
 
