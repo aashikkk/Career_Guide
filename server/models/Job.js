@@ -30,6 +30,10 @@ Job.init(
 			type: DataTypes.TEXT,
 			allowNull: true,
 		},
+		date: {
+			type: DataTypes.DATEONLY,
+			allowNull: true,
+		},
 	},
 	{ sequelize, modelName: "Job", tableName: "Job", timestamps: false }
 );

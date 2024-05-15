@@ -24,7 +24,7 @@ const blogController = {
 			if (!blog) {
 				return res.status(404).json({ error: "Blog not found" });
 			}
-			const updatedBlog = await Blog.update(blogData);
+			const updatedBlog = await blog.update(blogData);
 			res.status(200).json({
 				message: "Blog updated successfully",
 				blog: updatedBlog,

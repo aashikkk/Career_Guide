@@ -31,7 +31,7 @@ function EditableTableBlog() {
 		<div className="overflow-x-auto  py-12 mx-auto w-11/12">
 			<div className="flex justify-end pb-3">
 				<button
-					onClick={() => (window.location.href = `event/create`)} // Navigate to your create route
+					onClick={() => (window.location.href = `blog/create`)} // Navigate to your create route
 					className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
 					Create
 				</button>
@@ -69,7 +69,7 @@ function EditableTableBlog() {
 
 								<Table.Cell>
 									<a
-										href={`event/${blog.id}`} // Replace with your edit route
+										href={`blog/update/${blog.id}`} // Replace with your edit route
 										className="font-medium text-cyan-600 hover:underline dark:text-cyan-500">
 										Edit
 									</a>

@@ -27,6 +27,8 @@ import EventDescriptionPage from "./pages/EventDescriptionPage";
 import Appointment from "./components/CreateUpdateForms/Appointment";
 import Events from "./components/CreateUpdateForms/Events";
 import Counseller from "./components/CreateUpdateForms/Counseller";
+import Blog from "./components/CreateUpdateForms/Blog";
+import Job from "./components/CreateUpdateForms/Job";
 // import StripePaymentPage from "./pages/StripePaymentPage";
 
 const router = createBrowserRouter([
@@ -186,6 +188,32 @@ const router = createBrowserRouter([
 			{
 				path: "update/:id",
 				element: <Counseller func={"Update"} />,
+			},
+		],
+	},
+	{
+		path: "/admin/blog",
+		children: [
+			{
+				path: "create",
+				element: <Blog func={"Create"} />,
+			},
+			{
+				path: "update/:id",
+				element: <Blog func={"Update"} />,
+			},
+		],
+	},
+	{
+		path: "/admin/job",
+		children: [
+			{
+				path: "create",
+				element: <Job func={"Create"} />,
+			},
+			{
+				path: "update/:id",
+				element: <Job func={"Update"} />,
 			},
 		],
 	},

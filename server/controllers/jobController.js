@@ -2,7 +2,7 @@ const Job = require("../models/Job");
 
 const jobController = {
 	createJob: async (req, res) => {
-		const { jobTitle, type, company, location, description } = req.body;
+		const { jobTitle, type, company, location, description, date } = req.body;
 
 		try {
 			const newJob = await Job.create({
@@ -11,6 +11,7 @@ const jobController = {
 				company,
 				location,
 				description,
+				date,
 			});
 			res.status(201).json({
 				message: "Job created successfully",

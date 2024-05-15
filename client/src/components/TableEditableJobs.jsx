@@ -63,7 +63,7 @@ function EditableTableJobs() {
 								)}
 								<Table.Cell>
 									<a
-										href={`event/${job.id}`} // Replace with your edit route
+										href={`job/update/${job.id}`} // Replace with your edit route
 										className="font-medium text-cyan-600 hover:underline dark:text-cyan-500">
 										Edit
 									</a>
