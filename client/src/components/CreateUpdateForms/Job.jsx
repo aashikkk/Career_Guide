@@ -19,7 +19,7 @@ function Job({ func }) {
 			axios
 				.get(`/job/${id}`)
 				.then((res) => {
-					console.log(res.data);
+					// console.log(res.data);
 					setValues({
 						jobTitle: res.data.jobTitle,
 						type: res.data.type,
