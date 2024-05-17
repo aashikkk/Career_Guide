@@ -72,7 +72,7 @@ async function loginUser(req, res) {
 			// User authenticated successfully, generate JWT token
 			const name = user.name;
 			const token = generateAccessToken(user.id);
-			res.cookie("token", token, { httpOnly: true, secure: true });
+			res.cookie("token", token, { httpOnly: false, secure: false });
 			res.status(200).json({
 				message: "Login successful",
 				token,

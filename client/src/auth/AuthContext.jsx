@@ -9,17 +9,23 @@ const AuthProvider = ({ children }) => {
 
 	useEffect(() => {
 		const token = Cookies.get("token");
-		if (token) {
-			// Assuming you store the user's role or other details in the cookie or another form of storage
-			// You might need to validate the token with the server to get the user details
+		console.log("This is token from AuthContext  ", token);
+		if (token && (!user || user.token !== token)) {
 			const userFromCookie = { isAuthenticated: true, token: token };
 			setUser(userFromCookie);
+		} else if (!token && user) {
+			setUser(null);
 		}
-	}, []);
+	}, [user]);
 
 	const login = (userData) => {
 		setUser(userData); // userData should include isAuthenticated and role
-		Cookies.set("token", userData.token, { expires: 7, path: "/" }); // Set cookie with a specific expiry and path
+		Cookies.set("token", userData.token, {
+			expires: 7,
+			path: "/",
+			secure: false,
+			sameSite: "Strict",
+		}); // Set cookie with a specific expiry and path
 	};
 
 	const logout = () => {

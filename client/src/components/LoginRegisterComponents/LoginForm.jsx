@@ -25,7 +25,7 @@ function LoginForm() {
 			const response = await axios.post("/login", { username, password });
 			const { category, token, name } = response.data; // Assuming the response contains the user category
 			console.log(response.data);
-			console.log("Login Token is: " + token);
+			// console.log("Login Token is: " + token);
 			localStorage.setItem("token", token);
 
 			// Construct userData

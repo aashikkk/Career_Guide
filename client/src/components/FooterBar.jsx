@@ -48,23 +48,23 @@ function FooterBar() {
 					/>
 					<div className="mt-4 flex space-x-6 sm:mt-0 sm:justify-center">
 						<Footer.Icon
-							href="#"
+							href="https://www.facebook.com"
 							icon={BsFacebook}
 						/>
 						<Footer.Icon
-							href="#"
+							href="https://www.instagram.com"
 							icon={BsInstagram}
 						/>
 						<Footer.Icon
-							href="#"
+							href="https://www.twitter.com"
 							icon={BsTwitter}
 						/>
 						<Footer.Icon
-							href="#"
+							href="https://www.github.com"
 							icon={BsGithub}
 						/>
 						<Footer.Icon
-							href="#"
+							href="https://www.dribbble.com"
 							icon={BsDribbble}
 						/>
 					</div>
