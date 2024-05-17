@@ -11,7 +11,8 @@ import AdminDashboardPage from "./pages/AdminDashboardPage";
 import RegisterSuccessPage from "./pages/RegisterSuccessPage";
 import UserDashboardPage from "./pages/UserDashboardPage";
 import CounsellerDashboardPage from "./pages/CounsellerDashboardPage";
-import ViewableTable from "./components/TableViewable";
+import ViewableTableUser from "./components/TableViewableUser";
+import ViewableTableCounsellor from "./components/TableViewableCounsellor";
 import { useState, useEffect } from "react";
 import EditableTableEvent from "./components/TableEditableEvent";
 import EditableTableCounseller from "./components/TableEditableCounseller";
@@ -130,29 +131,29 @@ const router = createBrowserRouter([
 		children: [
 			{
 				index: true,
-				element: <ViewableTable />,
+				element: <ViewableTableUser />,
 			},
 			{
 				path: "viewAppointments",
-				element: <ViewableTable />,
+				element: <ViewableTableUser />,
 			},
 		],
 	},
 	{
 		path: "/counseller",
 		element: (
-			<ProtectedRoute allowedRoles={["counseller"]}>
+			<ProtectedRoute allowedRoles={["Counseller"]}>
 				<CounsellerDashboardPage />
 			</ProtectedRoute>
 		),
 		children: [
 			{
 				index: true,
-				element: <ViewableTable />,
+				element: <ViewableTableCounsellor />,
 			},
 			{
 				path: "viewAppointments",
-				element: <ViewableTable />,
+				element: <ViewableTableCounsellor />,
 			},
 		],
 	},
@@ -263,7 +264,6 @@ function App() {
 
 	// const handleLogout = () => {
 	// 	localStorage.removeItem("token");
-	// 	setLoggedIn(false);
 	// };
 
 	return (

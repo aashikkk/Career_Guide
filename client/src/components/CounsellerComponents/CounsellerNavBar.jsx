@@ -1,8 +1,16 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Navbar } from "flowbite-react";
 import NavItem from "../NavBarItem";
+import { AuthContext } from "../../auth/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 function CounsellerNavBar() {
+	const { logout } = useContext(AuthContext);
+	const navigate = useNavigate();
+	const handleLogout = () => {
+		logout();
+		navigate("/login");
+	};
 	return (
 		<div className="w-full">
 			<Navbar
@@ -14,8 +22,8 @@ function CounsellerNavBar() {
 						className={"mx-5"}
 					/>
 					<NavItem
-						className={""}
-						link={"logout"}
+						onClick={handleLogout}
+						// link={"logout"}
 						text={"Logout"}
 					/>
 				</Navbar.Collapse>

@@ -131,7 +131,7 @@ async function authenticate(req, res, next) {
 
 async function logout(req, res) {
 	res.clearCookie("token");
-	// res.cookie("token", "", { expires: new Date(0), path: "/" });
+	res.cookie("token", "", { expires: new Date(0), path: "/" });
 	res.status(200).json({ message: "Logout successful" });
 }
 
