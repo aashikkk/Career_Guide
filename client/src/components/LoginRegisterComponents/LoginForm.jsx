@@ -1,40 +1,50 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "../../axios";
 import { Input, Ripple, initTWE } from "tw-elements";
 import RememberMeCheckBox from "./RememberMeCheckBox";
 import Button from "./Button";
 import InputText from "./InputText";
+import { AuthContext } from "../../auth/AuthContext";
 import RegisterFailed from "./RegisterFailed";
 
 function LoginForm() {
 	initTWE({ Input, Ripple });
 	const navigate = useNavigate();
 	const [error, setError] = useState("");
+	const { login } = useContext(AuthContext);
 
 	const [username, setUsername] = useState("");
 	const [password, setPassword] = useState("");
 
 	const handleLogin = async (e) => {
 		e.preventDefault();
+		axios.defaults.withCredentials = true;
 
 		try {
 			const response = await axios.post("/login", { username, password });
-			const { category, token } = response.data; // Assuming the response contains the user category
-			// console.log(response.data);
+			const { category, token, name } = response.data; // Assuming the response contains the user category
+			console.log(response.data);
 			console.log("Login Token is: " + token);
 			localStorage.setItem("token", token);
+
+			// Construct userData
+			const userData = {
+				isAuthenticated: true,
+				role: category,
+				token: token,
+				name: name,
+			};
+
 			setError("");
-			// Assuming the response contains a token or some authentication info upon successful login
-			// Redirect to the dashboard page
+			// Use login function from context
+			login(userData);
+
+			// Redirect based on user role
 			switch (category) {
 				case "SchoolStudent":
-					navigate("/user");
-					break;
-				case "Undergraduate":
-					navigate("/user");
-					break;
 				case "Graduate":
+				case "Undergraduate":
 					navigate("/user");
 					break;
 				case "Admin":
@@ -47,6 +57,7 @@ function LoginForm() {
 					// Handle unexpected category
 					console.error("Unknown user category:", category);
 					setError("Invalid user category. Please contact support.");
+					console.log("Category:", category); // Debug: Check the category value
 			}
 		} catch (error) {
 			console.error("Login failed:", error);

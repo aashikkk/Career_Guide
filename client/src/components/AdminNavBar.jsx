@@ -1,6 +1,7 @@
 import React from "react";
 import { Navbar } from "flowbite-react";
 import NavItem from "./NavBarItem";
+import { useAuth } from "../auth/useAuth";
 
 function AdminNavBar() {
 	return (

@@ -29,6 +29,9 @@ import Events from "./components/CreateUpdateForms/Events";
 import Counseller from "./components/CreateUpdateForms/Counseller";
 import Blog from "./components/CreateUpdateForms/Blog";
 import Job from "./components/CreateUpdateForms/Job";
+import ProtectedRoute from "./auth/ProtectedRoute";
+import { AuthProvider } from "./auth/AuthContext";
+import UnauthorizedPage from "./pages/UnauthorizedPage";
 // import StripePaymentPage from "./pages/StripePaymentPage";
 
 const router = createBrowserRouter([
@@ -76,11 +79,19 @@ const router = createBrowserRouter([
 				path: "paymentCancel",
 				element: <PaymentCancelPage />,
 			},
+			{
+				path: "unauthorized",
+				element: <UnauthorizedPage />,
+			},
 		],
 	},
 	{
 		path: "/admin",
-		element: <AdminDashboardPage />,
+		element: (
+			<ProtectedRoute allowedRules={["Admin"]}>
+				<AdminDashboardPage />,
+			</ProtectedRoute>
+		),
 		children: [
 			{
 				index: true,
@@ -110,7 +121,12 @@ const router = createBrowserRouter([
 	},
 	{
 		path: "/user",
-		element: <UserDashboardPage />,
+		element: (
+			<ProtectedRoute
+				allowedRoles={["SchoolStudent", "Graduate", "Undergraduate"]}>
+				<UserDashboardPage />
+			</ProtectedRoute>
+		),
 		children: [
 			{
 				index: true,
@@ -124,7 +140,11 @@ const router = createBrowserRouter([
 	},
 	{
 		path: "/counseller",
-		element: <CounsellerDashboardPage />,
+		element: (
+			<ProtectedRoute allowedRoles={["counseller"]}>
+				<CounsellerDashboardPage />
+			</ProtectedRoute>
+		),
 		children: [
 			{
 				index: true,
@@ -246,7 +266,11 @@ function App() {
 	// 	setLoggedIn(false);
 	// };
 
-	return <RouterProvider router={router} />;
+	return (
+		<AuthProvider>
+			<RouterProvider router={router} />;
+		</AuthProvider>
+	);
 }
 
 export default App;

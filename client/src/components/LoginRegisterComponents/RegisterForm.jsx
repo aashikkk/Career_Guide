@@ -79,6 +79,7 @@ function RegisterForm() {
 				password,
 				category,
 			});
+
 			console.log(response.data);
 			navigate("/register/success");
 		} catch (error) {

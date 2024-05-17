@@ -1,8 +1,11 @@
 import { Navbar } from "flowbite-react";
 import { Link } from "react-router-dom";
 import NavItem from "./NavBarItem";
+import React, { useContext } from "react";
+import { AuthContext } from "../auth/AuthContext";
 
 function NavBar() {
+	const { logout } = useContext(AuthContext);
 	return (
 		<Navbar
 			fluid
@@ -31,6 +34,7 @@ function NavBar() {
 					text={"Contact Us"}
 				/>
 				<NavItem
+					onClick={logout}
 					link={"/login"}
 					text={"Login"}
 				/>

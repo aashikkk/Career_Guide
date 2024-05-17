@@ -4,6 +4,7 @@ dotenv.config({ override: true });
 const app = express();
 const bodyParser = require("body-parser");
 const cors = require("cors");
+const cookieParser = require("cookie-parser");
 
 // Import route files
 const userRoutes = require("./routes/userRoute");
@@ -17,8 +18,15 @@ const stripRoutes = require("./routes/stripeRoute");
 // Middleware
 app.use(bodyParser.json());
 app.use(express.json());
-app.use(cors());
+app.use(
+	cors({
+		origin: "http://localhost:5173",
+		methods: "GET,POST",
+		credentials: true,
+	})
+);
 app.use(express.urlencoded({ extended: false }));
+app.use(cookieParser());
 
 // Routes
 app.use("/", authRoutes);
