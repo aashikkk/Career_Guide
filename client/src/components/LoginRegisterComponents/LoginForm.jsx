@@ -6,7 +6,6 @@ import RememberMeCheckBox from "./RememberMeCheckBox";
 import Button from "./Button";
 import InputText from "./InputText";
 import { AuthContext } from "../../auth/AuthContext";
-import RegisterFailed from "./RegisterFailed";
 
 function LoginForm() {
 	initTWE({ Input, Ripple });
