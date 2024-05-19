@@ -8,7 +8,7 @@ function BlogComponent() {
 	const [blogs, setBlogs] = useState([]);
 
 	const handleBlogClick = (blog) => {
-		navigate("/api/blogs/desc", { state: { blog: blog } });
+		navigate("/blogs/desc", { state: { blog: blog } });
 	};
 
 	useEffect(() => {

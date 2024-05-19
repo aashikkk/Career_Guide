@@ -81,7 +81,7 @@ function RegisterForm() {
 			});
 
 			console.log(response.data);
-			navigate("/api/register/success");
+			navigate("/register/success");
 		} catch (error) {
 			console.error(error.response.data);
 			// Handle error
