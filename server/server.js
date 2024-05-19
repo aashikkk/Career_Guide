@@ -1,44 +1,42 @@
 const express = require("express");
-const dotenv = require("dotenv");
-dotenv.config({ override: true });
+require("dotenv").config({ override: true });
 const app = express();
-const bodyParser = require("body-parser");
 const cors = require("cors");
-const cookieParser = require("cookie-parser");
+const cookieParser = require('cookie-parser');
+const session = require("express-session");
+const routes = require("./routes");
+const sequelize = require("./connection/db");
+const SequelizeStore = require("connect-session-sequelize")(session.Store);
 
-// Import route files
-const userRoutes = require("./routes/userRoute");
-const eventRoutes = require("./routes/eventRoutes");
-const appointmentRoutes = require("./routes/appointmentRoutes");
-const blogRoutes = require("./routes/blogRoutes");
-const jobRoutes = require("./routes/jobRoutes");
-const authRoutes = require("./routes/authRoutes");
-const stripRoutes = require("./routes/stripeRoute");
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET,
+    cookie: { maxAge: 60000 * 10 }, // 10 mins
+    resave: false,
+    saveUninitialized: true,
+    store: new SequelizeStore({
+      db: sequelize,
+    }),
+  })
+);
 
 // Middleware
-app.use(bodyParser.json());
-app.use(express.json());
 app.use(
-	cors({
-		origin: "http://localhost:5173",
-		methods: "GET,POST,DELETE,PUT",
-		credentials: true,
-	})
+  cors({
+    origin: "http://localhost:5173",
+    methods: "GET,POST,DELETE,PUT",
+    credentials: true,
+  })
 );
-app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(routes);
 
-// Routes
-app.use("/", authRoutes);
-app.use("/user", userRoutes);
-app.use("/event", eventRoutes);
-app.use("/appointment", appointmentRoutes);
-app.use("/blog", blogRoutes);
-app.use("/job", jobRoutes);
-app.use("/pay", stripRoutes);
+const PORT = process.env.PORT || 3000;
 
-const PORT = process.env.PORT;
-
-app.listen(PORT, () => {
-	console.log(`Server is running on http://localhost:${PORT}`);
+sequelize.sync({ force: false }).then(() => {
+  app.listen(PORT, () =>
+    console.log(`Server is running on http://localhost:${PORT}`)
+  );
 });

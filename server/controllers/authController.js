@@ -1,223 +1,221 @@
-const bcrypt = require("bcrypt");
 const User = require("../models/User");
-const jwt = require("jsonwebtoken");
 const { Op } = require("sequelize");
+const { USER_CATEGORIES } = require("../models/enums");
+const { validateEmail, validatePassword } = require("../utils/validator");
+const { generateAccessToken } = require("../utils/tokens");
 
-const saltRounds = 10;
+const registerUser = async (req, res) => {
+  const { name, username, phoneNumber, email, nic, password } = req.body;
 
-const generateAccessToken = (userId) => {
-	return jwt.sign({ userId }, process.env.JWT_SECRET, { expiresIn: "1h" });
+  if (!name || !username || !email || !nic || !password || !req.body.category) {
+    return res.status(400).json({ message: "All fields are required" });
+  }
+
+  const category = req.body.category.toUpperCase();
+
+  if (
+    !USER_CATEGORIES.includes(category) ||
+    category === "ADMIN" ||
+    category === "COUNSELLOR"
+  ) {
+    return res.status(403).json({ message: "Invalid category" });
+  }
+
+  const { error: emailError } = validateEmail(email);
+  if (emailError) {
+    return res.status(400).json({ message: "Invalid email format" });
+  }
+
+  const { error: passwordError } = validatePassword(password);
+  if (passwordError) {
+    return res
+      .status(400)
+      .json({ message: "Password must be at least 8 characters long" });
+  }
+
+  try {
+    const existingUser = await User.findOne({
+      where: {
+        [Op.or]: [{ email }, { username }, { nic }],
+      },
+    });
+
+    if (existingUser) {
+      return res.status(400).json({ message: "User already exists" });
+    }
+
+    await User.create({
+      name,
+      username,
+      phoneNumber,
+      email,
+      nic,
+      password,
+      category,
+    });
+
+    return res.status(201).json({ message: "User registered successfully" });
+  } catch (error) {
+    console.error("Error registering user:", error);
+    return res.status(500).json({ error: "Internal server error" });
+  }
 };
 
-async function registerUser(req, res) {
-	const { name, username, phoneNumber, email, nic, password, category } =
-		req.body;
+const loginUser = async (req, res) => {
+  const { username, password } = req.body;
 
-	try {
-		// Check if user already exists
-		const existingUser = await User.findOne({
-			where: {
-				[Op.or]: [{ username }, { email }, { nic }],
-			},
-		});
-		if (existingUser) {
-			return res.status(400).json({ error: "User already exists" });
-		}
+  if (!username || !password) {
+    return res
+      .status(400)
+      .json({ message: "Username and password are required" });
+  }
 
-		// Hash password
-		const hashedPassword = await bcrypt.hash(password, saltRounds);
+  try {
+    const user = await User.findOne({ where: { username } });
+    if (!user) {
+      return res.status(401).json({ message: "Invalid credentials" });
+    }
 
-		// Insert user into database
-		const newUser = await User.create({
-			name,
-			username,
-			phoneNumber,
-			email,
-			nic,
-			password: hashedPassword,
-			category,
-		});
+    const isPasswordValid = user.checkPassword(password);
+    if (!isPasswordValid) {
+      return res.status(401).json({ message: "Invalid credentials" });
+    }
 
-		res.status(201).json({ message: "User registered successfully" });
-	} catch (error) {
-		console.error("Error registering user:", error);
-		res.status(500).json({ error: "Internal server error" });
-	}
-}
+    const token = generateAccessToken({ userId: user.id });
+    res.cookie("token", token, { httpOnly: true });
+    return res.status(200).json({ message: "Login successful" });
+  } catch (error) {
+    console.error("Error during login:", error);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+};
 
-async function loginUser(req, res) {
-	const { username, password } = req.body;
+const logout = async (req, res) => {
+  req.session.destroy((err) => {
+    if (err) {
+      console.error("Error destroying session:", err);
+      return res.status(500).json({ message: "Internal server error" });
+    }
+    res.clearCookie("token");
+    return res.status(200).json({ message: "Logout successful" });
+  });
+};
 
-	try {
-		// Fetch user from database
-		const user = await User.findOne({
-			where: { username },
-		});
+const registerAdmin = async (req, res) => {
+  const { name, username, email, password } = req.body;
 
-		if (!username || !password) {
-			return res
-				.status(400)
-				.json({ message: "Username and Password are Required" });
-		}
+  if (!name || !username || !email || !password) {
+    return res.status(400).json({ message: "All fields are required" });
+  }
 
-		if (!user) {
-			return res.status(401).json({ error: "Invalid username or password" });
-		}
+  const { error: emailError } = validateEmail(email);
+  if (emailError) {
+    return res.status(400).json({ message: "Invalid email format" });
+  }
 
-		// Check password
-		const passwordMatch = await bcrypt.compare(password, user.password);
-		if (!passwordMatch) {
-			return res.status(401).json({ error: "Invalid password" });
-		} else {
-			// User authenticated successfully, generate JWT token
-			const name = user.name;
-			const token = generateAccessToken(user.id);
-			res.cookie("token", token, { httpOnly: false, secure: false });
-			res.status(200).json({
-				message: "Login successful",
-				token,
-				category: user.category,
-				name: name,
-			});
-		}
-	} catch (error) {
-		console.error("Error logging in:", error);
-		res.status(500).json({ error: "Internal server error" });
-	}
-}
+  const { error: passwordError } = validatePassword(password);
+  if (passwordError) {
+    return res
+      .status(400)
+      .json({ message: "Password must be at least 8 characters long" });
+  }
 
-//Authentication Middleware using JWT
+  try {
+    const existingUser = await User.findOne({
+      where: {
+        [Op.or]: [{ username }, { email }],
+      },
+    });
 
-async function authenticate(req, res, next) {
-	const authHeader = req.headers.authorization;
-	console.log("Authorization Header: " + authHeader);
+    if (existingUser) {
+      return res.status(400).json({ message: "User already exists" });
+    }
 
-	if (!authHeader) {
-		return res
-			.status(401)
-			.json({ message: "No authorization header provided" });
-	}
+    await User.create({
+      name,
+      username,
+      email,
+      password,
+      category: "ADMIN",
+    });
 
-	const tokenParts = authHeader.split(" ");
+    return res.status(201).json({ message: "Admin registered successfully" });
+  } catch (error) {
+    console.error("Error registering admin:", error);
+    return res.status(500).json({ error: "Internal server error" });
+  }
+};
 
-	// Check if the Authorization header is in the 'Bearer token' format
-	if (tokenParts.length !== 2 || tokenParts[0] !== "Bearer") {
-		return res
-			.status(401)
-			.json({ message: "Authorization header is not in the correct format" });
-	}
+const registerCounsellor = async (req, res) => {
+  const { name, username, phoneNumber, email, nic, password, specialization } =
+    req.body;
 
-	const token = tokenParts[1];
-	console.log("Extracted Token: " + token);
+  if (
+    !name ||
+    !username ||
+    !phoneNumber ||
+    !email ||
+    !nic ||
+    !password ||
+    !req.body.category ||
+    !specialization
+  ) {
+    return res.status(400).json({ message: "All fields are required" });
+  }
 
-	try {
-		// Verify and validate the token
-		const decoded = jwt.verify(token, process.env.JWT_SECRET);
-		req.userId = decoded.userId;
-		next();
-	} catch (err) {
-		console.error("Token verification error:", err);
+  const category = req.body.category.toUpperCase();
 
-		// Provide more specific messages based on the type of JWT error
-		if (err instanceof jwt.JsonWebTokenError) {
-			return res.status(401).json({ message: "Invalid Token" });
-		} else if (err instanceof jwt.TokenExpiredError) {
-			return res.status(401).json({ message: "Token has expired" });
-		} else {
-			return res.status(500).json({ message: "Error processing token" });
-		}
-	}
-}
+  if (!category !== "COUNSELLOR") {
+    return res.status(403).json({ message: "Invalid category" });
+  }
 
-async function logout(req, res) {
-	res.clearCookie("token");
-	res.cookie("token", "", { expires: new Date(0), path: "/" });
-	res.status(200).json({ message: "Logout successful" });
-}
+  const { error: emailError } = validateEmail(email);
+  if (emailError) {
+    return res.status(400).json({ message: "Invalid email format" });
+  }
 
-async function registerAdmin(req, res) {
-	const { name, username, email, password } = req.body;
+  const { error: passwordError } = validatePassword(password);
+  if (passwordError) {
+    return res
+      .status(400)
+      .json({ message: "Password must be at least 8 characters long" });
+  }
 
-	try {
-		// Check if user already exists
-		const existingUser = await User.findOne({
-			where: {
-				[Op.or]: [{ username }, { email }],
-			},
-		});
-		if (existingUser) {
-			return res.status(400).json({ error: "User already exists" });
-		}
+  try {
+    const existingUser = await User.findOne({
+      where: {
+        [Op.or]: [{ username }, { email }, { nic }],
+      },
+    });
 
-		// Hash password
-		const hashedPassword = await bcrypt.hash(password, saltRounds);
+    if (existingUser) {
+      return res.status(400).json({ message: "User already exists" });
+    }
 
-		// Insert user into database
-		const newAdmin = await User.create({
-			name,
-			username,
-			email,
-			password: hashedPassword,
-			category: "Admin",
-		});
+    await User.create({
+      name,
+      username,
+      phoneNumber,
+      email,
+      nic,
+      password,
+      category,
+      specialization,
+    });
 
-		res.status(201).json({ message: "Admin registered successfully" });
-	} catch (error) {
-		console.error("Error registering admin:", error);
-		res.status(500).json({ error: "Internal server error" });
-	}
-}
-
-async function registerCounseller(req, res) {
-	const {
-		name,
-		username,
-		phoneNumber,
-		email,
-		nic,
-		password,
-		category,
-		specialization,
-	} = req.body;
-
-	try {
-		// Check if user already exists
-		const existingUser = await User.findOne({
-			where: {
-				[Op.or]: [{ username }, { email }, { nic }],
-			},
-		});
-		if (existingUser) {
-			return res.status(400).json({ error: "User already exists" });
-		}
-
-		// Hash password
-		const hashedPassword = await bcrypt.hash(password, saltRounds);
-
-		// Insert user into database
-		const newCounseller = await User.create({
-			name,
-			username,
-			phoneNumber,
-			email,
-			nic,
-			password: hashedPassword,
-			category: "Counseller",
-			specialization,
-		});
-
-		res.status(201).json({ message: "Counseller registered successfully" });
-	} catch (error) {
-		console.error("Error registering user:", error);
-		res.status(500).json({ error: "Internal server error" });
-	}
-}
+    return res
+      .status(201)
+      .json({ message: "Counsellor registered successfully" });
+  } catch (error) {
+    console.error("Error registering counsellor:", error);
+    return res.status(500).json({ error: "Internal server error" });
+  }
+};
 
 module.exports = {
-	registerUser,
-	loginUser,
-	registerAdmin,
-	registerCounseller,
-	authenticate,
-	logout,
+  registerUser,
+  loginUser,
+  registerAdmin,
+  registerCounsellor,
+  logout,
 };
