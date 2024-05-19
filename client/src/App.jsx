@@ -33,7 +33,7 @@ import Job from "./components/CreateUpdateForms/Job";
 import ProtectedRoute from "./auth/ProtectedRoute";
 import { AuthProvider } from "./auth/AuthContext";
 import UnauthorizedPage from "./pages/UnauthorizedPage";
-// import StripePaymentPage from "./pages/StripePaymentPage";
+import StripePaymentPage from "./pages/StripePaymentPage";
 
 const router = createBrowserRouter([
 	{
@@ -160,6 +160,10 @@ const router = createBrowserRouter([
 	{
 		path: "/pay",
 		element: <CounsellerBookingPage />,
+	},
+	{
+		path: "/pay/withstripe",
+		element: <StripePaymentPage />,
 	},
 	{
 		path: "/jobs/desc",

@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import axios from "../../axios";
 import { Input, Ripple, initTWE } from "tw-elements";
 import RememberMeCheckBox from "./RememberMeCheckBox";
@@ -12,6 +12,7 @@ function LoginForm() {
 	const navigate = useNavigate();
 	const [error, setError] = useState("");
 	const { login } = useContext(AuthContext);
+	const location = useLocation();
 
 	const [username, setUsername] = useState("");
 	const [password, setPassword] = useState("");
@@ -39,6 +40,8 @@ function LoginForm() {
 			// Use login function from context
 			login(userData);
 
+			const from = location.state?.from || "/";
+			navigate(from);
 			// Redirect based on user role
 			switch (category) {
 				case "SchoolStudent":
