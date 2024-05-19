@@ -2,7 +2,7 @@ const express = require("express");
 require("dotenv").config({ override: true });
 const app = express();
 const cors = require("cors");
-const cookieParser = require('cookie-parser');
+const cookieParser = require("cookie-parser");
 const session = require("express-session");
 const routes = require("./routes");
 const sequelize = require("./connection/db");
@@ -33,7 +33,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(routes);
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3001;
 
 sequelize.sync({ force: false }).then(() => {
   app.listen(PORT, () =>

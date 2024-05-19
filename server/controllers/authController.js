@@ -1,6 +1,6 @@
 const User = require("../models/User");
 const { Op } = require("sequelize");
-const { USER_CATEGORIES } = require("../models/enums");
+const { USER_CATEGORIES, ROLES } = require("../models/enums");
 const { validateEmail, validatePassword } = require("../utils/validator");
 const { generateAccessToken } = require("../utils/tokens");
 
@@ -15,8 +15,8 @@ const registerUser = async (req, res) => {
 
   if (
     !USER_CATEGORIES.includes(category) ||
-    category === "ADMIN" ||
-    category === "COUNSELLOR"
+    category === ROLES.ADMIN ||
+    category === ROLES.COUNSELLOR
   ) {
     return res.status(403).json({ message: "Invalid category" });
   }
@@ -136,7 +136,7 @@ const registerAdmin = async (req, res) => {
       username,
       email,
       password,
-      category: "ADMIN",
+      category: ROLES.ADMIN,
     });
 
     return res.status(201).json({ message: "Admin registered successfully" });
@@ -165,7 +165,7 @@ const registerCounsellor = async (req, res) => {
 
   const category = req.body.category.toUpperCase();
 
-  if (!category !== "COUNSELLOR") {
+  if (!category !== ROLES.COUNSELLOR) {
     return res.status(403).json({ message: "Invalid category" });
   }
 

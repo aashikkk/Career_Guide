@@ -8,6 +8,7 @@ const validateToken = (req, res, next) => {
   }
   try {
     const decoded = verifyToken(token);
+    // console.log("decoded", decoded);
     req.userId = decoded.userId;
     next();
   } catch (err) {
@@ -16,13 +17,12 @@ const validateToken = (req, res, next) => {
   }
 };
 
-const validateRole = async (category) => {
+const validateRole = (allowedRoles) => {
   return async (req, res, next) => {
     try {
       const userId = req.userId;
       const user = await User.findByPk(userId);
-
-      if (!user || !user.category || !category.includes(user.category)) {
+      if (!user || !allowedRoles.includes(user.category)) {
         return res.status(403).json({ message: "Access forbidden" });
       }
       next();
