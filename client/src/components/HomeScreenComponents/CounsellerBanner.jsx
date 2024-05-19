@@ -9,7 +9,7 @@ function CounsellerBanner() {
 
 	useEffect(() => {
 		axios
-			.get("/user/category/Counseller")
+			.get("/api/user/category/Counseller")
 			.then((response) => {
 				setCounseller(response.data);
 			})

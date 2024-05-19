@@ -6,15 +6,15 @@ import { Outlet } from "react-router-dom";
 import { AuthContext } from "../auth/AuthContext";
 
 function AdminDashboardPage() {
-	const { user } = useContext(AuthContext);
-	return (
-		<div>
-			<NavBar />
-			<GreetingUserBar name={user ? user.name : "User"} />
-			<AdminNavBar />
-			<Outlet />
-		</div>
-	);
+  const { user } = useContext(AuthContext);
+  return (
+    <div>
+      <NavBar />
+      <GreetingUserBar name={user ? user.name : "User"} />
+      <AdminNavBar />
+      <Outlet />
+    </div>
+  );
 }
 
 export default AdminDashboardPage;

@@ -7,6 +7,20 @@ const session = require("express-session");
 const routes = require("./routes");
 const sequelize = require("./connection/db");
 const SequelizeStore = require("connect-session-sequelize")(session.Store);
+const morgan = require("morgan");
+
+// Log requests
+app.use(morgan("dev", { color: true }));
+morgan.token("body", (req) => JSON.stringify(req.body));
+app.use(
+  morgan((tokens, req, res) => {
+    return [
+      tokens.method(req, res),
+      tokens.url(req, res),
+      tokens.body(req, res),
+    ].join(" | ");
+  })
+);
 
 app.use(
   session({
@@ -31,9 +45,9 @@ app.use(
 app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(routes);
+app.use("/api", routes);
 
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.PORT || 5000;
 
 sequelize.sync({ force: false }).then(() => {
   app.listen(PORT, () =>

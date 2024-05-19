@@ -7,7 +7,7 @@ function EditableTableJobs() {
 
 	useEffect(() => {
 		axios
-			.get("/job/")
+			.get("/api/job/")
 			.then((response) => {
 				setJobs(response.data);
 			})
@@ -18,7 +18,7 @@ function EditableTableJobs() {
 
 	const handleDelete = (jobId) => {
 		axios
-			.delete(`/job/${jobId}`)
+			.delete(`/api/job/${jobId}`)
 			.then((response) => {
 				setJobs(jobs.filter((job) => job.id !== jobId));
 			})

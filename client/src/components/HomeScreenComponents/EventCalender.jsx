@@ -15,7 +15,7 @@ function EventCalender() {
 
 	useEffect(() => {
 		axios
-			.get("/event/")
+			.get("/api/event/")
 			.then((response) => {
 				setEvents(response.data);
 			})

@@ -15,7 +15,8 @@ router.post("/register", registerUser);
 router.post("/registerAdmin", registerAdmin);
 router.post("/registerCounseller", registerCounsellor);
 router.post("/login", loginUser);
-router.post("/logout", validateToken, validateRole([ROLES.ADMIN,ROLES.UNDERGRADUATE]), logout);
+// router.post("/logout", validateToken, validateRole([ROLES.ADMIN,ROLES.UNDERGRADUATE]), logout);
+router.post("/logout", validateToken, logout);
 // router.post("/forgetPassword", forgetPassword);
 // router.post("/resetPassword", resetPassword);
 

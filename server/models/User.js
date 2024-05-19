@@ -51,7 +51,7 @@ User.init(
     },
     nic: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: true,
     },
     age: {
       type: DataTypes.INTEGER,

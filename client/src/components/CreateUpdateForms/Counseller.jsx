@@ -21,7 +21,7 @@ function Counseller({ func }) {
 	useEffect(() => {
 		if (id) {
 			axios
-				.get(`/user/by-id/${id}`)
+				.get(`/api/user/by-id/${id}`)
 				.then((res) => {
 					console.log(res.data);
 					setValues({

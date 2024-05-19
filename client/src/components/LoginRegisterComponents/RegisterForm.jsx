@@ -70,7 +70,7 @@ function RegisterForm() {
 		}
 
 		try {
-			const response = await axios.post("/register", {
+			const response = await axios.post("/api/register", {
 				name,
 				username,
 				phoneNumber,
@@ -81,7 +81,7 @@ function RegisterForm() {
 			});
 
 			console.log(response.data);
-			navigate("/register/success");
+			navigate("/api/register/success");
 		} catch (error) {
 			console.error(error.response.data);
 			// Handle error

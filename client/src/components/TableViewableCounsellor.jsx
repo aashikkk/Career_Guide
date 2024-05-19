@@ -9,7 +9,7 @@ function ViewableTableCounsellor() {
 
 	useEffect(() => {
 		axios
-			.get("/appointment/")
+			.get("/api/appointment/")
 			.then((response) => {
 				setAppointments(response.data);
 			})

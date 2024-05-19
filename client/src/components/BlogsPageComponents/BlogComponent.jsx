@@ -8,12 +8,12 @@ function BlogComponent() {
 	const [blogs, setBlogs] = useState([]);
 
 	const handleBlogClick = (blog) => {
-		navigate("/blogs/desc", { state: { blog: blog } });
+		navigate("/api/blogs/desc", { state: { blog: blog } });
 	};
 
 	useEffect(() => {
 		axios
-			.get("/blog/")
+			.get("/api/blog/")
 			.then((response) => {
 				setBlogs(response.data);
 			})

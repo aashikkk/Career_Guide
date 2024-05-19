@@ -14,7 +14,7 @@ function JobsPage() {
 
 	useEffect(() => {
 		axios
-			.get("/job/")
+			.get("/api/job/")
 			.then((response) => {
 				setJobs(response.data);
 			})
