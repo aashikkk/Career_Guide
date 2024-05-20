@@ -13,7 +13,7 @@ function BlogComponent() {
 
 	useEffect(() => {
 		axios
-			.get("/blog/")
+			.get("/api/blog/")
 			.then((response) => {
 				setBlogs(response.data);
 			})

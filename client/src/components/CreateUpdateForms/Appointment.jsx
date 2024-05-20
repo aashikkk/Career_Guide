@@ -15,7 +15,7 @@ function Appointment({ func }) {
 	useEffect(() => {
 		if (id) {
 			axios
-				.get(`/appointment/byId/${id}`)
+				.get(`/api/appointment/byId/${id}`)
 				.then((res) => {
 					console.log(res.data);
 					setValues({

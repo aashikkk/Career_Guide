@@ -11,7 +11,8 @@ import AdminDashboardPage from "./pages/AdminDashboardPage";
 import RegisterSuccessPage from "./pages/RegisterSuccessPage";
 import UserDashboardPage from "./pages/UserDashboardPage";
 import CounsellerDashboardPage from "./pages/CounsellerDashboardPage";
-import ViewableTable from "./components/TableViewable";
+import ViewableTableUser from "./components/TableViewableUser";
+import ViewableTableCounsellor from "./components/TableViewableCounsellor";
 import { useState, useEffect } from "react";
 import EditableTableEvent from "./components/TableEditableEvent";
 import EditableTableCounseller from "./components/TableEditableCounseller";
@@ -29,7 +30,10 @@ import Events from "./components/CreateUpdateForms/Events";
 import Counseller from "./components/CreateUpdateForms/Counseller";
 import Blog from "./components/CreateUpdateForms/Blog";
 import Job from "./components/CreateUpdateForms/Job";
-// import StripePaymentPage from "./pages/StripePaymentPage";
+import ProtectedRoute from "./auth/ProtectedRoute";
+import { AuthProvider } from "./auth/AuthContext";
+import UnauthorizedPage from "./pages/UnauthorizedPage";
+import StripePaymentPage from "./pages/StripePaymentPage";
 
 const router = createBrowserRouter([
 	{
@@ -76,11 +80,19 @@ const router = createBrowserRouter([
 				path: "paymentCancel",
 				element: <PaymentCancelPage />,
 			},
+			{
+				path: "unauthorized",
+				element: <UnauthorizedPage />,
+			},
 		],
 	},
 	{
 		path: "/admin",
-		element: <AdminDashboardPage />,
+		element: (
+			<ProtectedRoute allowedRules={["ADMIN"]}>
+				<AdminDashboardPage />,
+			</ProtectedRoute>
+		),
 		children: [
 			{
 				index: true,
@@ -110,35 +122,48 @@ const router = createBrowserRouter([
 	},
 	{
 		path: "/user",
-		element: <UserDashboardPage />,
+		element: (
+			<ProtectedRoute
+				allowedRoles={["SCHOOL_STUDENT", "GRADUATE", "UNDERGRADUATE"]}>
+				<UserDashboardPage />
+			</ProtectedRoute>
+		),
 		children: [
 			{
 				index: true,
-				element: <ViewableTable />,
+				element: <ViewableTableUser />,
 			},
 			{
 				path: "viewAppointments",
-				element: <ViewableTable />,
+				element: <ViewableTableUser />,
 			},
 		],
 	},
 	{
 		path: "/counseller",
-		element: <CounsellerDashboardPage />,
+		element: (
+			<ProtectedRoute allowedRoles={["COUNSELLOR"]}>
+				<CounsellerDashboardPage />
+			</ProtectedRoute>
+		),
 		children: [
 			{
 				index: true,
-				element: <ViewableTable />,
+				element: <ViewableTableCounsellor />,
 			},
 			{
 				path: "viewAppointments",
-				element: <ViewableTable />,
+				element: <ViewableTableCounsellor />,
 			},
 		],
 	},
 	{
 		path: "/pay",
 		element: <CounsellerBookingPage />,
+	},
+	{
+		path: "/pay/withstripe",
+		element: <StripePaymentPage />,
 	},
 	{
 		path: "/jobs/desc",
@@ -220,33 +245,11 @@ const router = createBrowserRouter([
 ]);
 
 function App() {
-	// const [loggedIn, setLoggedIn] = useState(false);
-
-	// const authenticate = async () => {
-	// 	try {
-	// 		const token = localStorage.getItem("token");
-	// 		console.log(token);
-	// 		if (token) {
-	// 			setLoggedIn(true);
-	// 		} else {
-	// 			setLoggedIn(false);
-	// 		}
-	// 	} catch (err) {
-	// 		console.log(err);
-	// 		setLoggedIn(false);
-	// 	}
-	// };
-
-	// useEffect(() => {
-	// 	authenticate();
-	// }, []);
-
-	// const handleLogout = () => {
-	// 	localStorage.removeItem("token");
-	// 	setLoggedIn(false);
-	// };
-
-	return <RouterProvider router={router} />;
+	return (
+		<AuthProvider>
+			<RouterProvider router={router} />;
+		</AuthProvider>
+	);
 }
 
 export default App;

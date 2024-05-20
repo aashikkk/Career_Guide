@@ -1,7 +1,13 @@
 const { DataTypes, Model } = require("sequelize");
-const sequelize = require("../db");
+const sequelize = require("../connection/db");
+const bcrypt = require("bcrypt");
+const { USER_CATEGORIES } = require("./enums");
 
-class User extends Model {}
+class User extends Model {
+	checkPassword(loginPw) {
+		return bcrypt.compareSync(loginPw, this.password);
+	}
+}
 
 User.init(
 	{
@@ -17,13 +23,7 @@ User.init(
 		},
 		category: {
 			type: DataTypes.ENUM,
-			values: [
-				"SchoolStudent",
-				"Undergraduate",
-				"Graduate",
-				"Admin",
-				"Counseller",
-			],
+			values: USER_CATEGORIES,
 			allowNull: false,
 		},
 		name: {
@@ -41,6 +41,9 @@ User.init(
 		password: {
 			type: DataTypes.STRING,
 			allowNull: false,
+			validate: {
+				len: [8],
+			},
 		},
 		highestQualifications: {
 			type: DataTypes.STRING,
@@ -73,6 +76,9 @@ User.init(
 		GraduateYear: {
 			type: DataTypes.STRING,
 			allowNull: true,
+			validate: {
+				isNumeric: true,
+			},
 		},
 		specialization: {
 			type: DataTypes.STRING,
@@ -84,6 +90,19 @@ User.init(
 		tableName: "Users",
 		modelName: "User",
 		timestamps: false,
+		hooks: {
+			async beforeCreate(newUserData) {
+				newUserData.password = await bcrypt.hash(newUserData.password, 10);
+				return newUserData;
+			},
+			async beforeUpdate(updatedUserData) {
+				updatedUserData.password = await bcrypt.hash(
+					updatedUserData.password,
+					10
+				);
+				return updatedUserData;
+			},
+		},
 	}
 );
 

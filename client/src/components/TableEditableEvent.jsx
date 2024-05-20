@@ -7,7 +7,7 @@ function EditableTableEvent() {
 
 	useEffect(() => {
 		axios
-			.get("/event/")
+			.get("/api/event/")
 			.then((response) => {
 				setEvents(response.data);
 			})
@@ -18,7 +18,7 @@ function EditableTableEvent() {
 
 	const handleDelete = (eventId) => {
 		axios
-			.delete(`/event/${eventId}`)
+			.delete(`/api/event/${eventId}`)
 			.then((response) => {
 				setEvents(events.filter((event) => event.id !== eventId));
 			})

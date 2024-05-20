@@ -1,40 +1,57 @@
-const bcrypt = require("bcrypt");
 const User = require("../models/User");
-const jwt = require("jsonwebtoken");
 const { Op } = require("sequelize");
+const { USER_CATEGORIES, ROLES } = require("../models/enums");
+const { validateEmail, validatePassword } = require("../utils/validator");
+const { generateAccessToken } = require("../utils/tokens");
 
-const saltRounds = 10;
+const registerUser = async (req, res) => {
+	const { name, username, phoneNumber, email, nic, password } = req.body;
 
-const generateAccessToken = (userId) => {
-	return jwt.sign({ userId }, process.env.JWT_SECRET, { expiresIn: "1h" });
-};
+	if (!name || !username || !email || !nic || !password || !req.body.category) {
+		return res.status(400).json({ message: "All fields are required" });
+	}
 
-async function registerUser(req, res) {
-	const { name, username, phoneNumber, email, nic, password, category } =
-		req.body;
+	const category = req.body.category.toUpperCase();
+
+	if (
+		!USER_CATEGORIES.includes(category) ||
+		category === ROLES.ADMIN ||
+		category === ROLES.COUNSELLOR
+	) {
+		return res.status(403).json({ message: "Invalid category" });
+	}
+
+	const { error: emailError } = validateEmail(email);
+	if (emailError) {
+		return res.status(400).json({ message: "Invalid email format" });
+	}
+
+	const { error: passwordError } = validatePassword(password);
+	if (passwordError) {
+		return res
+			.status(400)
+			.json({ message: "Password must be at least 8 characters long" });
+	}
 
 	try {
-		// Check if user already exists
 		const existingUser = await User.findOne({
 			where: {
 				[Op.or]: [{ username }, { email }, { nic }],
 			},
 		});
+
 		if (existingUser) {
 			return res.status(400).json({ error: "User already exists" });
 		}
 
-		// Hash password
-		const hashedPassword = await bcrypt.hash(password, saltRounds);
-
 		// Insert user into database
-		const newUser = await User.create({
+		await User.create({
 			name,
 			username,
 			phoneNumber,
 			email,
 			nic,
-			password: hashedPassword,
+			password,
 			category,
 		});
 
@@ -43,73 +60,76 @@ async function registerUser(req, res) {
 		console.error("Error registering user:", error);
 		res.status(500).json({ error: "Internal server error" });
 	}
-}
+};
 
-async function loginUser(req, res) {
+const loginUser = async (req, res) => {
 	const { username, password } = req.body;
 
+	if (!username || !password) {
+		return res
+			.status(400)
+			.json({ message: "Username and password are required" });
+	}
+
 	try {
-		// Fetch user from database
 		const user = await User.findOne({
 			where: { username },
 		});
 
-		if (!username || !password) {
-			return res
-				.status(400)
-				.json({ message: "Username and Password are Required" });
-		}
-
 		if (!user) {
-			return res.status(401).json({ error: "Invalid username or password" });
+			return res.status(401).json({ error: "Invalid credentials" });
 		}
 
-		// Check password
-		const passwordMatch = await bcrypt.compare(password, user.password);
-		if (!passwordMatch) {
-			return res.status(401).json({ error: "Invalid password" });
-		} else {
-			// User authenticated successfully, generate JWT token
-			const token = generateAccessToken(user.id);
-			res.status(200).json({
-				message: "Login successful",
-				token,
-				category: user.category,
-			});
+		const isPasswordValid = user.checkPassword(password);
+		if (!isPasswordValid) {
+			return res.status(401).json({ message: "Invalid credentials" });
 		}
+
+		// User authenticated successfully, generate JWT token
+		// const name = user.name;
+		const token = generateAccessToken({ userId: user.id });
+		res.cookie("token", token, { httpOnly: true });
+		res.status(200).json({
+			category: user.category,
+			name: user.name,
+		});
 	} catch (error) {
 		console.error("Error logging in:", error);
 		res.status(500).json({ error: "Internal server error" });
 	}
-}
+};
 
-//Authentication Middleware using JWT
+const logout = async (req, res) => {
+	req.session.destroy((err) => {
+		if (err) {
+			console.error("Error destroying session:", err);
+			return res.status(500).json({ message: "Internal server error" });
+		}
+		res.clearCookie("token");
+		return res.status(200).json({ message: "Logout successful" });
+	});
+};
 
-async function authenticate(req, res, next) {
-	const token = req.header("Authorization");
-	console.log("Unextracted Token: " + token);
-
-	if (!token) {
-		return res.status(401).json({ message: "Unauthorized" });
-	}
-	const extractedToken = token.split(" ")[1];
-	console.log("Actual Token: " + extractedToken);
-
-	try {
-		// Verify and validate our token
-		const decoded = jwt.verify(extractedToken, process.env.JWT_SECRET);
-		req.userId = decoded.userId;
-		next();
-	} catch (err) {
-		res.status(401).json({ message: "Invalid Token" });
-	}
-}
-
-async function registerAdmin(req, res) {
+const registerAdmin = async (req, res) => {
 	const { name, username, email, password } = req.body;
 
+	if (!name || !username || !email || !password) {
+		return res.status(400).json({ message: "All fields are required" });
+	}
+
+	const { error: emailError } = validateEmail(email);
+	if (emailError) {
+		return res.status(400).json({ message: "Invalid email format" });
+	}
+
+	const { error: passwordError } = validatePassword(password);
+	if (passwordError) {
+		return res
+			.status(400)
+			.json({ message: "Password must be at least 8 characters long" });
+	}
+
 	try {
-		// Check if user already exists
 		const existingUser = await User.findOne({
 			where: {
 				[Op.or]: [{ username }, { email }],
@@ -119,16 +139,13 @@ async function registerAdmin(req, res) {
 			return res.status(400).json({ error: "User already exists" });
 		}
 
-		// Hash password
-		const hashedPassword = await bcrypt.hash(password, saltRounds);
-
 		// Insert user into database
-		const newAdmin = await User.create({
+		await User.create({
 			name,
 			username,
 			email,
-			password: hashedPassword,
-			category: "Admin",
+			password,
+			category: ROLES.ADMIN,
 		});
 
 		res.status(201).json({ message: "Admin registered successfully" });
@@ -136,22 +153,44 @@ async function registerAdmin(req, res) {
 		console.error("Error registering admin:", error);
 		res.status(500).json({ error: "Internal server error" });
 	}
-}
+};
 
-async function registerCounseller(req, res) {
-	const {
-		name,
-		username,
-		phoneNumber,
-		email,
-		nic,
-		password,
-		category,
-		specialization,
-	} = req.body;
+const registerCounsellor = async (req, res) => {
+	const { name, username, phoneNumber, email, nic, password, specialization } =
+		req.body;
+
+	if (
+		!name ||
+		!username ||
+		!phoneNumber ||
+		!email ||
+		!nic ||
+		!password ||
+		!specialization
+	) {
+		return res.status(400).json({ message: "All fields are required" });
+	}
+
+	// const category = req.body.category.toUpperCase();
+
+	// if (category !== "COUNSELLOR") {
+	// 	return res.status(403).json({ message: "Invalid category" });
+	// }
+
+	const { error: emailError } = validateEmail(email);
+
+	if (emailError) {
+		return res.status(400).json({ message: "Invalid email format" });
+	}
+
+	const { error: passwordError } = validatePassword(password);
+	if (passwordError) {
+		return res
+			.status(400)
+			.json({ message: "Password must be at least 8 characters long" });
+	}
 
 	try {
-		// Check if user already exists
 		const existingUser = await User.findOne({
 			where: {
 				[Op.or]: [{ username }, { email }, { nic }],
@@ -161,18 +200,15 @@ async function registerCounseller(req, res) {
 			return res.status(400).json({ error: "User already exists" });
 		}
 
-		// Hash password
-		const hashedPassword = await bcrypt.hash(password, saltRounds);
-
 		// Insert user into database
-		const newCounseller = await User.create({
+		await User.create({
 			name,
 			username,
 			phoneNumber,
 			email,
 			nic,
-			password: hashedPassword,
-			category: "Counseller",
+			password,
+			category: ROLES.COUNSELLOR,
 			specialization,
 		});
 
@@ -181,12 +217,12 @@ async function registerCounseller(req, res) {
 		console.error("Error registering user:", error);
 		res.status(500).json({ error: "Internal server error" });
 	}
-}
+};
 
 module.exports = {
 	registerUser,
 	loginUser,
 	registerAdmin,
-	registerCounseller,
-	authenticate,
+	registerCounsellor,
+	logout,
 };

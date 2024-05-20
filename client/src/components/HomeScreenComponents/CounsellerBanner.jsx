@@ -2,14 +2,16 @@ import React, { useState, useEffect } from "react";
 import { Dropdown, Ripple, initTWE } from "tw-elements";
 import CounsellerCard from "./CounsellerCard";
 import axios from "../../axios";
+import { useNavigate } from "react-router-dom";
 
 function CounsellerBanner() {
 	initTWE({ Dropdown, Ripple });
+	const navigate = useNavigate();
 	const [counseller, setCounseller] = useState([]);
 
 	useEffect(() => {
 		axios
-			.get("/user/category/Counseller")
+			.get("/api/user/category/COUNSELLOR")
 			.then((response) => {
 				setCounseller(response.data);
 			})
@@ -17,6 +19,10 @@ function CounsellerBanner() {
 				console.error("Error fetching counseller", error);
 			});
 	}, []);
+
+	const handleCounsellerClick = (counseller) => {
+		navigate("/pay", { state: { ...counseller } });
+	};
 
 	return (
 		<div className="mx-20 py-5">
@@ -124,11 +130,16 @@ function CounsellerBanner() {
 			</div>
 			<div className="grid lg:grid-cols-4 gap-4 md:grid-cols-3 mt-7">
 				{counseller.slice(0, 8).map((counseller) => (
-					<CounsellerCard
+					<div
 						key={counseller.id}
-						name={counseller.name}
-						specialization={counseller.specialization}
-					/>
+						onClick={() => handleCounsellerClick(counseller)}>
+						<CounsellerCard
+							key={counseller.id}
+							name={counseller.name}
+							educationLevel={counseller.educationLevel}
+							specialization={counseller.specialization}
+						/>
+					</div>
 				))}
 			</div>
 		</div>

@@ -13,7 +13,7 @@ function Blog({ func }) {
 	useEffect(() => {
 		if (id) {
 			axios
-				.get(`/blog/${id}`)
+				.get(`/api/blog/${id}`)
 				.then((res) => {
 					console.log(res.data);
 					setValues({

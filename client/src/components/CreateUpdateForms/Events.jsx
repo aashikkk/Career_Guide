@@ -17,7 +17,7 @@ function Events({ func }) {
 	useEffect(() => {
 		if (id) {
 			axios
-				.get(`/event/${id}`)
+				.get(`/api/event/${id}`)
 				.then((res) => {
 					console.log(res.data);
 					setValues({
