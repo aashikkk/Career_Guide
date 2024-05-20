@@ -11,8 +11,9 @@ function LoginForm() {
 	initTWE({ Input, Ripple });
 	const navigate = useNavigate();
 	const [error, setError] = useState("");
-	const { login } = useContext(AuthContext);
-	const location = useLocation();
+	const { loggedIn } = useContext(AuthContext);
+
+	// const location = useLocation();
 
 	const [username, setUsername] = useState("");
 	const [password, setPassword] = useState("");
@@ -22,37 +23,35 @@ function LoginForm() {
 		axios.defaults.withCredentials = true;
 
 		try {
-			const response = await axios.post("/login", { username, password });
-			const { category, token, name } = response.data; // Assuming the response contains the user category
+			const response = await axios.post("/api/login", { username, password });
+			const { category, name } = response.data; // Assuming the response contains the user category
 			console.log(response.data);
-			// console.log("Login Token is: " + token);
-			localStorage.setItem("token", token);
 
 			// Construct userData
 			const userData = {
 				isAuthenticated: true,
 				role: category,
-				token: token,
 				name: name,
 			};
 
 			setError("");
 			// Use login function from context
-			login(userData);
+			loggedIn(userData);
 
-			const from = location.state?.from || "/";
-			navigate(from);
+			// const from = location.state?.from || "/";
+			// navigate(from);
+
 			// Redirect based on user role
 			switch (category) {
-				case "SchoolStudent":
-				case "Graduate":
-				case "Undergraduate":
+				case "SCHOOL_STUDENT":
+				case "GRADUATE":
+				case "UNDERGRADUATE":
 					navigate("/user");
 					break;
-				case "Admin":
+				case "ADMIN":
 					navigate("/admin");
 					break;
-				case "Counseller":
+				case "COUNSELLOR":
 					navigate("/counseller");
 					break;
 				default:

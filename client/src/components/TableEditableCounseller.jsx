@@ -7,7 +7,7 @@ function EditableTableCounseller() {
 
 	useEffect(() => {
 		axios
-			.get("/user/category/Counseller")
+			.get("/api/user/category/Counseller")
 			.then((response) => {
 				setCounseller(response.data);
 			})
@@ -18,7 +18,7 @@ function EditableTableCounseller() {
 
 	const handleDelete = (counsellerId) => {
 		axios
-			.delete(`/user/category/Counseller/${counsellerId}`)
+			.delete(`/api/user/category/Counseller/${counsellerId}`)
 			.then((response) => {
 				setCounseller(
 					counseller.filter((counseller) => counseller.id !== counsellerId)

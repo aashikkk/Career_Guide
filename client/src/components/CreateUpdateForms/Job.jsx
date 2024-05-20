@@ -17,7 +17,7 @@ function Job({ func }) {
 	useEffect(() => {
 		if (id) {
 			axios
-				.get(`/job/${id}`)
+				.get(`/api/job/${id}`)
 				.then((res) => {
 					// console.log(res.data);
 					setValues({

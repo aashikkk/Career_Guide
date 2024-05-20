@@ -2,15 +2,10 @@ import React, { useContext } from "react";
 import { Navbar } from "flowbite-react";
 import NavItem from "./NavBarItem";
 import { AuthContext } from "../auth/AuthContext";
-import { useNavigate } from "react-router-dom";
 
 function AdminNavBar() {
-	const { logout } = useContext(AuthContext);
-	const navigate = useNavigate();
-	const handleLogout = () => {
-		logout();
-		navigate("/login");
-	};
+	const { loggedOut } = useContext(AuthContext);
+
 	return (
 		<div>
 			<Navbar
@@ -37,11 +32,11 @@ function AdminNavBar() {
 						link={"manageJobs"}
 						text={"Jobs"}
 					/>
-					<NavItem
-						onClick={handleLogout}
+					{/* <NavItem
+						onClick={loggedOut}
 						// link={"logout"}
 						text={"Logout"}
-					/>
+					/> */}
 				</Navbar.Collapse>
 			</Navbar>
 		</div>

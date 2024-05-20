@@ -89,7 +89,7 @@ const router = createBrowserRouter([
 	{
 		path: "/admin",
 		element: (
-			<ProtectedRoute allowedRules={["Admin"]}>
+			<ProtectedRoute allowedRules={["ADMIN"]}>
 				<AdminDashboardPage />,
 			</ProtectedRoute>
 		),
@@ -124,7 +124,7 @@ const router = createBrowserRouter([
 		path: "/user",
 		element: (
 			<ProtectedRoute
-				allowedRoles={["SchoolStudent", "Graduate", "Undergraduate"]}>
+				allowedRoles={["SCHOOL_STUDENT", "GRADUATE", "UNDERGRADUATE"]}>
 				<UserDashboardPage />
 			</ProtectedRoute>
 		),
@@ -142,7 +142,7 @@ const router = createBrowserRouter([
 	{
 		path: "/counseller",
 		element: (
-			<ProtectedRoute allowedRoles={["Counseller"]}>
+			<ProtectedRoute allowedRoles={["COUNSELLOR"]}>
 				<CounsellerDashboardPage />
 			</ProtectedRoute>
 		),
@@ -245,31 +245,6 @@ const router = createBrowserRouter([
 ]);
 
 function App() {
-	// const [loggedIn, setLoggedIn] = useState(false);
-
-	// const authenticate = async () => {
-	// 	try {
-	// 		const token = localStorage.getItem("token");
-	// 		console.log(token);
-	// 		if (token) {
-	// 			setLoggedIn(true);
-	// 		} else {
-	// 			setLoggedIn(false);
-	// 		}
-	// 	} catch (err) {
-	// 		console.log(err);
-	// 		setLoggedIn(false);
-	// 	}
-	// };
-
-	// useEffect(() => {
-	// 	authenticate();
-	// }, []);
-
-	// const handleLogout = () => {
-	// 	localStorage.removeItem("token");
-	// };
-
 	return (
 		<AuthProvider>
 			<RouterProvider router={router} />;

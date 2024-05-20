@@ -10,6 +10,7 @@ function StripePaymentPage() {
 			const stripe = await loadStripe(
 				import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY
 			);
+
 			const body = {
 				lineItems: [
 					{
@@ -21,7 +22,7 @@ function StripePaymentPage() {
 			};
 
 			try {
-				const response = await axios.post(`/pay/create-checkout-session`, {
+				const response = await axios.post(`/api/pay/create-checkout-session`, {
 					headers: {
 						"Content-Type": "application/json",
 					},

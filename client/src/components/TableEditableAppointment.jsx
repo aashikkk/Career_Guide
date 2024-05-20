@@ -7,7 +7,7 @@ function EditableTableAppointment() {
 
 	useEffect(() => {
 		axios
-			.get("/appointment/")
+			.get("/api/appointment/")
 			.then((response) => {
 				setAppointments(response.data);
 			})
@@ -18,7 +18,7 @@ function EditableTableAppointment() {
 
 	const handleDelete = (appointmentId) => {
 		axios
-			.delete(`/appointment/${appointmentId}`)
+			.delete(`/api/appointment/${appointmentId}`)
 			.then((response) => {
 				setAppointments(
 					appointments.filter((appointment) => appointment.id !== appointmentId)

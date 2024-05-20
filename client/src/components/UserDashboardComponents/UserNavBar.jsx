@@ -7,10 +7,10 @@ import { useNavigate } from "react-router-dom";
 function UserNavBar() {
 	const { logout } = useContext(AuthContext);
 	const navigate = useNavigate();
-	const handleLogout = () => {
-		logout();
-		navigate("/login");
-	};
+	// const handleLogout = () => {
+	// 	logout();
+	// 	navigate("/login");
+	// };
 	return (
 		<div>
 			<Navbar
@@ -21,13 +21,13 @@ function UserNavBar() {
 						// link={"viewAppointments"}
 						text={"View my Appointments"}
 					/>
-					{
+					{/* {
 						<NavItem
 							onClick={handleLogout}
 							// link={"/login"}
 							text={"Logout"}
 						/>
-					}
+					} */}
 				</Navbar.Collapse>
 			</Navbar>
 		</div>

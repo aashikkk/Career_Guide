@@ -7,7 +7,7 @@ function EditableTableBlog() {
 
 	useEffect(() => {
 		axios
-			.get("/blog/")
+			.get("/api/blog/")
 			.then((response) => {
 				setBlogs(response.data);
 			})
@@ -18,7 +18,7 @@ function EditableTableBlog() {
 
 	const handleDelete = (blogId) => {
 		axios
-			.delete(`/blog/${blogId}`)
+			.delete(`/api/blog/${blogId}`)
 			.then((response) => {
 				setBlogs(blogs.filter((blog) => blog.id !== blogId));
 			})

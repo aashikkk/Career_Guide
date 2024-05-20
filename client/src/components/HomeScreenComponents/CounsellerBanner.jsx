@@ -11,7 +11,7 @@ function CounsellerBanner() {
 
 	useEffect(() => {
 		axios
-			.get("/user/category/Counseller")
+			.get("/api/user/category/COUNSELLOR")
 			.then((response) => {
 				setCounseller(response.data);
 			})

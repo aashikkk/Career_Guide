@@ -7,6 +7,7 @@ import { AuthContext } from "../auth/AuthContext";
 
 function AdminDashboardPage() {
 	const { user } = useContext(AuthContext);
+
 	return (
 		<div>
 			<NavBar />

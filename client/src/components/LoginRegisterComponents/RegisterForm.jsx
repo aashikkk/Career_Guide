@@ -12,16 +12,6 @@ function RegisterForm() {
 
 	const navigate = useNavigate();
 
-	// const [formData, setFormData] = useState({
-	// 	name: "",
-	// 	username: "",
-	// 	phoneNumber: "",
-	// 	email: "",
-	// 	nic: "",
-	// 	password: "",
-	// 	category: "",
-	// });
-
 	const [name, setName] = useState("");
 	const [username, setUsername] = useState("");
 	const [phoneNumber, setPhoneNumber] = useState("");
@@ -70,7 +60,7 @@ function RegisterForm() {
 		}
 
 		try {
-			const response = await axios.post("/register", {
+			const response = await axios.post("/api/register", {
 				name,
 				username,
 				phoneNumber,

@@ -10,22 +10,14 @@ function CounsellerBookingPage() {
 	const { user } = useContext(AuthContext);
 
 	const { name, specialization, educationLevel } = location.state;
+	console.log(name, user.name);
 
-	const isAuthenticated = () => {
-		return user && user.token;
-		// const token = Cookies.get("token");
-		// return token;
-	};
-
-	const handleBookingClick = async () => {
-		if (isAuthenticated()) {
-			console.log("Token found");
-			const counseller = name;
+	const handleBookingClick = () => {
+		if (user && user.isAuthenticated) {
 			navigate("/pay/withstripe", {
-				state: { user: user, counseller: counseller },
+				state: { userName: user.name, counsellorName: name },
 			});
 		} else {
-			console.log("No token found");
 			navigate("/login", { state: { from: "/stripe" } });
 		}
 	};
