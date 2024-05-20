@@ -1,7 +1,6 @@
 import React, { useContext } from "react";
 import { Card } from "flowbite-react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
-import Cookies from "js-cookie";
 import { AuthContext } from "../auth/AuthContext"; // Adjust the path as necessary
 
 function CounsellerBookingPage() {
@@ -10,7 +9,6 @@ function CounsellerBookingPage() {
 	const { user } = useContext(AuthContext);
 
 	const { name, specialization, educationLevel } = location.state;
-	console.log(name, user.name);
 
 	const handleBookingClick = () => {
 		if (user && user.isAuthenticated) {

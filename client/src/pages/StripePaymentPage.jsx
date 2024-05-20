@@ -11,22 +11,22 @@ function StripePaymentPage() {
 				import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY
 			);
 
-			const body = {
-				lineItems: [
-					{
-						name: "Counselling for Career",
-						price: 2000,
-						quantity: 1,
-					},
-				],
-			};
+			// const body = {
+			// 	lineItems: [
+			// 		{
+			// 			// // name: "Counselling for Career",
+			// 			// price: "price_1PINZpJffTY8EYLglsUOuYEh",
+			// 			// quantity: 1,
+			// 		},
+			// 	],
+			// };
 
 			try {
 				const response = await axios.post(`/api/pay/create-checkout-session`, {
 					headers: {
 						"Content-Type": "application/json",
 					},
-					body: JSON.stringify(body),
+					// body: JSON.stringify(body),
 				});
 
 				if (response && response.status === 200) {
