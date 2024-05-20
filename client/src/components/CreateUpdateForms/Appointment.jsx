@@ -37,7 +37,7 @@ function Appointment({ func }) {
 	function handleSubmit(event) {
 		event.preventDefault();
 		const method = id ? "put" : "post";
-		const url = id ? `/appointment/${id}` : "/appointment/";
+		const url = id ? `/api/appointment/${id}` : "/api/appointment/";
 
 		axios[method](url, values)
 			.then(() => navigate("/admin/manageAppointments"))

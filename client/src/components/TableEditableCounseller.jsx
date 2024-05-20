@@ -3,29 +3,29 @@ import { Table } from "flowbite-react";
 import axios from "../axios";
 
 function EditableTableCounseller() {
-	const [counseller, setCounseller] = useState([]);
+	const [counsellor, setCounsellor] = useState([]);
 
 	useEffect(() => {
 		axios
-			.get("/api/user/category/Counseller")
+			.get("/api/user/category/COUNSELLOR")
 			.then((response) => {
-				setCounseller(response.data);
+				setCounsellor(response.data);
 			})
 			.catch((error) => {
-				console.error("Error fetching counseller", error);
+				console.error("Error fetching counsellor", error);
 			});
 	}, []);
 
-	const handleDelete = (counsellerId) => {
+	const handleDelete = (counsellorId) => {
 		axios
-			.delete(`/api/user/category/Counseller/${counsellerId}`)
+			.delete(`/api/user/category/COUNSELLOR/${counsellorId}`)
 			.then((response) => {
-				setCounseller(
-					counseller.filter((counseller) => counseller.id !== counsellerId)
+				setCounsellor(
+					counsellor.filter((counsellor) => counsellor.id !== counsellorId)
 				);
 			})
 			.catch((error) => {
-				console.error("Error deleting counseller", error);
+				console.error("Error deleting counsellor", error);
 			});
 	};
 
@@ -38,10 +38,10 @@ function EditableTableCounseller() {
 					Create
 				</button>
 			</div>
-			{counseller.length > 0 ? (
+			{counsellor.length > 0 ? (
 				<Table striped>
 					<Table.Head>
-						{Object.keys(counseller[0]).map(
+						{Object.keys(counsellor[0]).map(
 							(key) =>
 								![
 									"id",
@@ -64,11 +64,11 @@ function EditableTableCounseller() {
 						</Table.HeadCell>
 					</Table.Head>
 					<Table.Body className="divide-y">
-						{counseller.map((counseller) => (
+						{counsellor.map((counsellor) => (
 							<Table.Row
-								key={counseller.id}
+								key={counsellor.id}
 								className="bg-white dark:border-gray-700 dark:bg-gray-800">
-								{Object.keys(counseller).map(
+								{Object.keys(counsellor).map(
 									(key) =>
 										![
 											"id",
@@ -79,20 +79,20 @@ function EditableTableCounseller() {
 											"currentYear",
 											"GraduateYear",
 										].includes(key) && (
-											<Table.Cell key={key}>{counseller[key]}</Table.Cell>
+											<Table.Cell key={key}>{counsellor[key]}</Table.Cell>
 										)
 								)}
 
 								<Table.Cell>
 									<a
-										href={`/admin/counseller/update/${counseller.id}`} // Replace with your edit route
+										href={`/admin/counseller/update/${counsellor.id}`} // Replace with your edit route
 										className="font-medium text-cyan-600 hover:underline dark:text-cyan-500">
 										Edit
 									</a>
 								</Table.Cell>
 								<Table.Cell>
 									<button
-										onClick={() => handleDelete(counseller.id)}
+										onClick={() => handleDelete(counsellor.id)}
 										className="font-medium text-red-600 hover:underline dark:text-red-500">
 										Delete
 									</button>

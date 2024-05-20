@@ -49,7 +49,7 @@ function Counseller({ func }) {
 	function handleSubmit(event) {
 		event.preventDefault();
 		const method = id ? "put" : "post";
-		const url = id ? `/user/by-id/${id}` : "/user/";
+		const url = id ? `/api/user/by-id/${id}` : "/api/user/";
 
 		axios[method](url, values)
 			.then(() => navigate("/admin/manageResourcePersons"))

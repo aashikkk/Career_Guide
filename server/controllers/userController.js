@@ -44,7 +44,7 @@ const userController = {
 		const hashedPassword = await bcrypt.hash(password, saltRounds);
 
 		try {
-			const newCounseller = await User.create({
+			await User.create({
 				name,
 				username,
 				phoneNumber,
@@ -55,7 +55,7 @@ const userController = {
 				highestQualifications,
 				majorField,
 				specialization,
-				category: "Counseller",
+				category: "COUNSELLOR",
 			});
 			res.status(201).json({
 				message: "Counseller registered successfully",
@@ -97,7 +97,7 @@ const userController = {
 
 		try {
 			const user = await User.findOne({
-				where: { id, category: "Counseller" },
+				where: { id, category: "COUNSELLOR" },
 			});
 			if (!user) {
 				return res.status(404).json({ error: "User not found" });
