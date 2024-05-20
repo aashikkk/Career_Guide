@@ -97,6 +97,7 @@ function LoginForm() {
 								type={"text"}
 								placeholder={"Username"}
 								labelName={"Username"}
+								addon={"@"}
 								value={username}
 								onChange={setUsername}
 							/>

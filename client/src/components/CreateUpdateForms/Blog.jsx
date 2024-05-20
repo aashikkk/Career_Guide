@@ -33,7 +33,7 @@ function Blog({ func }) {
 	function handleSubmit(event) {
 		event.preventDefault();
 		const method = id ? "put" : "post";
-		const url = id ? `/blog/${id}` : "/blog/";
+		const url = id ? `/api/blog/${id}` : "/api/blog/";
 
 		axios[method](url, values)
 			.then(() => navigate("/admin/manageBlogs"))

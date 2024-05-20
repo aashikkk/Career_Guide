@@ -41,7 +41,7 @@ function Job({ func }) {
 	function handleSubmit(event) {
 		event.preventDefault();
 		const method = id ? "put" : "post";
-		const url = id ? `/job/${id}` : "/job/";
+		const url = id ? `/api/job/${id}` : "/api/job/";
 
 		axios[method](url, values)
 			.then(() => navigate("/admin/manageJobs"))

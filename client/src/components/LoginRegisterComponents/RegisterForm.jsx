@@ -4,6 +4,7 @@ import axios from "../../axios";
 import InputText from "./InputText";
 import { useNavigate } from "react-router-dom";
 import Button from "./Button";
+import { Label, Select } from "flowbite-react";
 
 function RegisterForm() {
 	useEffect(() => {
@@ -44,6 +45,8 @@ function RegisterForm() {
 		}
 		if (!password) {
 			errors.password = "Password is required";
+		} else if (password.length < 8) {
+			errors.password = "Password must be at least 8 characters long";
 		}
 		if (!category) {
 			errors.category = "Category is required";
@@ -143,25 +146,27 @@ function RegisterForm() {
 								error={errors.password}
 							/>
 							<div className="relative mb-6">
-								<label
-									htmlFor="users"
-									className="block mb-2 text-m font-medium">
-									Choose a Category:
-								</label>
-								<select
+								<div className="mb-2">
+									<Label
+										htmlFor="users"
+										value="Choose a Category"
+									/>
+								</div>
+
+								<Select
 									value={category}
 									onChange={(e) => setCategory(e.target.value)}
-									name="userType"
-									className="rounded peer block min-h-[auto] w-full border bg-gray-50 px-3 py-[0.32rem] leading-[2.15] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[twe-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none dark:text-white dark:placeholder:text-neutral-300 dark:autofill:shadow-autofill dark:peer-focus:text-primary [&:not([data-twe-input-placeholder-active])]:placeholder:opacity-0">
+									name="userType">
 									<option value="">Select Category</option>
 									<option value="SchoolStudent">School Student</option>
 									<option value="Undergraduate">Undergraduate</option>
 									<option value="Graduate">Graduate</option>
-								</select>
+								</Select>
 								{errors.category && (
 									<p className="text-red-500 mt-1">{errors.category}</p>
 								)}
 							</div>
+
 							<Button
 								type={"submit"}
 								BtnName={"Register"}
@@ -185,3 +190,24 @@ function RegisterForm() {
 }
 
 export default RegisterForm;
+
+{
+	/* <div className="relative mb-6">
+	<label
+		htmlFor="users"
+		className="block mb-2 text-m font-medium">
+		Choose a Category:
+	</label>
+	<select
+		value={category}
+		onChange={(e) => setCategory(e.target.value)}
+		name="userType"
+		className="rounded peer block min-h-[auto] w-full border bg-gray-50 px-3 py-[0.32rem] leading-[2.15] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[twe-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none dark:text-white dark:placeholder:text-neutral-300 dark:autofill:shadow-autofill dark:peer-focus:text-primary [&:not([data-twe-input-placeholder-active])]:placeholder:opacity-0">
+		<option value="">Select Category</option>
+		<option value="SchoolStudent">School Student</option>
+		<option value="Undergraduate">Undergraduate</option>
+		<option value="Graduate">Graduate</option>
+	</select>
+	{errors.category && <p className="text-red-500 mt-1">{errors.category}</p>}
+</div>; */
+}

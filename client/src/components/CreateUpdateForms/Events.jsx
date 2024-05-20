@@ -41,7 +41,7 @@ function Events({ func }) {
 	function handleSubmit(event) {
 		event.preventDefault();
 		const method = id ? "put" : "post";
-		const url = id ? `/event/${id}` : "/event/";
+		const url = id ? `/api/event/${id}` : "/api/event/";
 
 		axios[method](url, values)
 			.then(() => navigate("/admin/manageEvents"))
