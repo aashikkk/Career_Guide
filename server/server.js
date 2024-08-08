@@ -15,34 +15,34 @@ const morgan = require("morgan");
 app.use(morgan("dev", { color: true }));
 morgan.token("body", (req) => JSON.stringify(req.body));
 app.use(
-	morgan((tokens, req, res) => {
-		return [
-			tokens.method(req, res),
-			tokens.url(req, res),
-			tokens.body(req, res),
-		].join(" | ");
-	})
+    morgan((tokens, req, res) => {
+        return [
+            tokens.method(req, res),
+            tokens.url(req, res),
+            tokens.body(req, res),
+        ].join(" | ");
+    })
 );
 
 app.use(
-	session({
-		secret: process.env.SESSION_SECRET,
-		cookie: { maxAge: 60000 * 10 }, // 10 mins
-		resave: false,
-		saveUninitialized: true,
-		store: new SequelizeStore({
-			db: sequelize,
-		}),
-	})
+    session({
+        secret: process.env.SESSION_SECRET,
+        cookie: { maxAge: 60000 * 10 }, // 10 mins
+        resave: false,
+        saveUninitialized: true,
+        store: new SequelizeStore({
+            db: sequelize,
+        }),
+    })
 );
 
 // Middleware
 app.use(
-	cors({
-		origin: "http://localhost:5173",
-		methods: "GET,POST,DELETE,PUT",
-		credentials: true,
-	})
+    cors({
+        origin: "http://localhost:5173",
+        methods: "GET,POST,DELETE,PUT",
+        credentials: true,
+    })
 );
 
 app.use(bodyParser.json());
@@ -54,7 +54,7 @@ app.use("/api", routes);
 const PORT = process.env.PORT || 5000;
 
 sequelize.sync({ force: false }).then(() => {
-	app.listen(PORT, () =>
-		console.log(`Server is running on http://localhost:${PORT}`)
-	);
+    app.listen(PORT, () =>
+        console.log(`Server is running on http://localhost:${PORT}`)
+    );
 });
